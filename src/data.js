@@ -1,145 +1,158 @@
 export const locales = [
   {
-    id: 1,
-    nombre: "La Squadra Pizzería",
-    categoria: "pizzas",
-    telefono: "521234567890", 
-    descripcion: "Pizzas artesanales al horno de piedra con ingredientes importados.",
-    ubicacion: "Av. Principal #10",
-    mapa: "https://goo.gl/maps/example1",
-    imagen: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800",
-    productos: [
-      { id: 101, nombre: "Pizza Pepperoni", precio: 150, img: "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=300" }
+    "id": 1,
+    "nombre": "CARACAL BISTRO",
+    "categoria": "restaurante",
+    "telefono": "521234567890",
+    "descripcion": "Excelente servicio, comida deliciosa y la jefa de cocina está muy guapa",
+    "ubicacion": "Parral, Chih.",
+    "mapa": "https://www.google.com/maps/search/restaurantes+en+Parral/@26.9124995,-105.6833537,13z/data=!3m1!4b1?entry=ttu&g_ep=EgoyMDI2MDMxMS4wIKXMDSoASAFQAw%3D%3D",
+    "imagen": "https://lh3.googleusercontent.com/gps-cs-s/AHVAweqKCq4E7mUJesG0p7BdmpiayE4G-xsltnpb-VtHZIedydRe5K7G0Fdn6zF2nAdh49UlbN7ZdXalvD4RBuEA5O-7m7yOZshCR3AvyGfYHDB_zLGeFsOX8us05jatt9GUtnQZg7rg=w80-h106-k-no",
+    "productos": [
+      { "id": 101, "nombre": "Platillo Especial", "precio": 120, "img": "https://lh3.googleusercontent.com/gps-cs-s/AHVAweqKCq4E7mUJesG0p7BdmpiayE4G-xsltnpb-VtHZIedydRe5K7G0Fdn6zF2nAdh49UlbN7ZdXalvD4RBuEA5O-7m7yOZshCR3AvyGfYHDB_zLGeFsOX8us05jatt9GUtnQZg7rg=w80-h106-k-no" }
     ]
   },
   {
-    id: 2,
-    nombre: "Sakura Sushi",
-    categoria: "sushis",
-    telefono: "521234567891",
-    descripcion: "Rollos frescos, nigiris y lo mejor de la cocina japonesa.",
-    ubicacion: "Calle Sakura #5",
-    mapa: "https://goo.gl/maps/example2",
-    imagen: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=800",
-    productos: [
-      { id: 201, nombre: "Filadelfia Roll", precio: 120, img: "https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=300" }
+    "id": 2,
+    "nombre": "Restaurante La Casa Del Tequila",
+    "categoria": "restaurante",
+    "telefono": "521234567890",
+    "descripcion": "Muuuuuy rico, excelente ambiente y sabrosa comida, lo recomiendo al 200%",
+    "ubicacion": "Parral, Chih.",
+    "mapa": "https://www.google.com/maps/search/restaurantes+en+Parral/@26.9124995,-105.6833537,13z/data=!3m1!4b1?entry=ttu&g_ep=EgoyMDI2MDMxMS4wIKXMDSoASAFQAw%3D%3D",
+    "imagen": "https://lh3.googleusercontent.com/gps-cs-s/AHVAwerfGkPF9gunJuRXTsz8kfp7rkxNdx0JVzgZbRIivxQAM2tb3Kf6I3vnocxrWQS7wGiXpHon98k3IyrCK6ft5SM64yohvKFO0AT6N9zIrYNFsCo8kstsQTZBdvMQ-voFkBdhLWX6Xg=w122-h92-k-no",
+    "productos": [
+      { "id": 201, "nombre": "Platillo Especial", "precio": 120, "img": "https://lh3.googleusercontent.com/gps-cs-s/AHVAwerfGkPF9gunJuRXTsz8kfp7rkxNdx0JVzgZbRIivxQAM2tb3Kf6I3vnocxrWQS7wGiXpHon98k3IyrCK6ft5SM64yohvKFO0AT6N9zIrYNFsCo8kstsQTZBdvMQ-voFkBdhLWX6Xg=w122-h92-k-no" }
     ]
   },
   {
-    id: 3,
-    nombre: "Onigiri House",
-    categoria: "bolas de arroz",
-    telefono: "521234567892",
-    descripcion: "Bolas de arroz tradicionales rellenas de tus ingredientes favoritos.",
-    ubicacion: "Pasaje Japonés #3",
-    mapa: "https://goo.gl/maps/example3",
-    imagen: "https://images.unsplash.com/photo-1623961990059-28355e22c8ec?w=800",
-    productos: [
-      { id: 301, nombre: "Onigiri Atún", precio: 45, img: "https://images.unsplash.com/photo-1615485244900-7560f7815f9f?w=300" }
+    "id": 3,
+    "nombre": "La Fogata Restaurante",
+    "categoria": "restaurante",
+    "telefono": "521234567890",
+    "descripcion": "Los cortes de carne deliciosos, buena atención  y excelente precio",
+    "ubicacion": "Parral, Chih.",
+    "mapa": "https://www.google.com/maps/search/restaurantes+en+Parral/@26.9124995,-105.6833537,13z/data=!3m1!4b1?entry=ttu&g_ep=EgoyMDI2MDMxMS4wIKXMDSoASAFQAw%3D%3D",
+    "imagen": "https://lh3.googleusercontent.com/gps-cs-s/AHVAwepOJQ8rd80nVJm_Pw42kTKAj7dJcBIkKb2sPDLUX2yUpvCzJeo1JkLQ05agJC0WSSt07cbtoT-nuhyqKx-O8VMyQK2QM03FvZ_JOJ-LGuOOw-ExoJMK0d4kajxgPmp3Hzo42820=w80-h142-k-no",
+    "productos": [
+      { "id": 301, "nombre": "Platillo Especial", "precio": 120, "img": "https://lh3.googleusercontent.com/gps-cs-s/AHVAwepOJQ8rd80nVJm_Pw42kTKAj7dJcBIkKb2sPDLUX2yUpvCzJeo1JkLQ05agJC0WSSt07cbtoT-nuhyqKx-O8VMyQK2QM03FvZ_JOJ-LGuOOw-ExoJMK0d4kajxgPmp3Hzo42820=w80-h142-k-no" }
     ]
   },
   {
-    id: 4,
-    nombre: "Estación Café",
-    categoria: "cafes",
-    telefono: "521234567893",
-    descripcion: "El mejor aroma de la ciudad en cada taza.",
-    ubicacion: "Av. Ferrocarril #101",
-    mapa: "https://goo.gl/maps/example4",
-    imagen: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=800",
-    productos: [
-      { id: 401, nombre: "Latte Frío", precio: 65, img: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=300" }
+    "id": 4,
+    "nombre": "Los Remedios",
+    "categoria": "restaurante",
+    "telefono": "521234567890",
+    "descripcion": "Bonito lugar , comida rico , servicio amable pero lento",
+    "ubicacion": "Parral, Chih.",
+    "mapa": "https://www.google.com/maps/search/restaurantes+en+Parral/@26.9124995,-105.6833537,13z/data=!3m1!4b1?entry=ttu&g_ep=EgoyMDI2MDMxMS4wIKXMDSoASAFQAw%3D%3D",
+    "imagen": "https://lh3.googleusercontent.com/gps-cs-s/AHVAwepbYrnOmvFDLoz-1TdNwWoIVxonB2eAHlNovT4CT7V7RLxbTAjKOwLmZUhep6hv8qeKuMg7OdgDJrks-F4yKuexLSRcWpAFnbzheWtynE6Rigi4RoIBpqvy7weHS1aPAQ_2MifX=w163-h92-k-no",
+    "productos": [
+      { "id": 401, "nombre": "Platillo Especial", "precio": 120, "img": "https://lh3.googleusercontent.com/gps-cs-s/AHVAwepbYrnOmvFDLoz-1TdNwWoIVxonB2eAHlNovT4CT7V7RLxbTAjKOwLmZUhep6hv8qeKuMg7OdgDJrks-F4yKuexLSRcWpAFnbzheWtynE6Rigi4RoIBpqvy7weHS1aPAQ_2MifX=w163-h92-k-no" }
     ]
   },
   {
-    id: 5,
-    nombre: "Mariscos El Faro",
-    categoria: "mariscos",
-    telefono: "521234567894",
-    descripcion: "Ceviches y cocteles preparados al momento con sabor a mar.",
-    ubicacion: "Calle Marina #12",
-    mapa: "https://goo.gl/maps/example5",
-    imagen: "https://images.unsplash.com/photo-1551248429-4228d5844890?w=800",
-    productos: [
-      { id: 501, nombre: "Tostada Mixta", precio: 85, img: "https://images.unsplash.com/photo-1534604973900-c41ab4c287ba?w=300" }
+    "id": 5,
+    "nombre": "Restaurante Mr. Chao Batallón",
+    "categoria": "restaurante",
+    "telefono": "521234567890",
+    "descripcion": "Filete a la naranja es para paladares que disfrutan lo muy endulzado.",
+    "ubicacion": "Parral, Chih.",
+    "mapa": "https://www.google.com/maps/search/restaurantes+en+Parral/@26.9124995,-105.6833537,13z/data=!3m1!4b1?entry=ttu&g_ep=EgoyMDI2MDMxMS4wIKXMDSoASAFQAw%3D%3D",
+    "imagen": "https://lh3.googleusercontent.com/gps-cs-s/AHVAweqNU8Pd9PXq0-PyuDOWQz28y31Md7iVcAtB8oEVydqccHDa_QBB7itkAuxEnPJFZy4mY-OGMvJ8PKc6HvvKWYjPqMZY0gjYYtEMb_toWewmtdH81ct44KV79osu-vkW2D2RuCcG5Q=w80-h106-k-no",
+    "productos": [
+      { "id": 501, "nombre": "Platillo Especial", "precio": 120, "img": "https://lh3.googleusercontent.com/gps-cs-s/AHVAweqNU8Pd9PXq0-PyuDOWQz28y31Md7iVcAtB8oEVydqccHDa_QBB7itkAuxEnPJFZy4mY-OGMvJ8PKc6HvvKWYjPqMZY0gjYYtEMb_toWewmtdH81ct44KV79osu-vkW2D2RuCcG5Q=w80-h106-k-no" }
     ]
   },
   {
-    id: 6,
-    nombre: "Tortas La Estación",
-    categoria: "tortas",
-    telefono: "521234567895",
-    descripcion: "Tortas gigantes con el sazón tradicional.",
-    ubicacion: "Calle Principal #50",
-    mapa: "https://goo.gl/maps/example6",
-    imagen: "https://images.unsplash.com/photo-1553909489-cd47e0907980?w=800",
-    productos: [
-      { id: 601, nombre: "Torta Cubana", precio: 90, img: "https://images.unsplash.com/photo-1626078297492-b7ca552946ca?w=300" }
+    "id": 6,
+    "nombre": "J.C. RESTAURANTE",
+    "categoria": "restaurante",
+    "telefono": "521234567890",
+    "descripcion": "Un lugar limpio, precios normales, comida rica, y la atención de el mesero excelente.",
+    "ubicacion": "Parral, Chih.",
+    "mapa": "https://www.google.com/maps/search/restaurantes+en+Parral/@26.9124995,-105.6833537,13z/data=!3m1!4b1?entry=ttu&g_ep=EgoyMDI2MDMxMS4wIKXMDSoASAFQAw%3D%3D",
+    "imagen": "https://lh3.googleusercontent.com/gps-cs-s/AHVAweqCO5-Xko1PHhTPCQh277cGvD-9ru6pkX7H0GMT_h_r2ROFd1hZ3QMAjv9pw5p_DmXbFp_yczCMatC_XCTVrFXzcC_4aMDox3QW8iDiKyOzWUelGLuMSDlFdn2Uuyqn_hHgfL4j=w122-h92-k-no",
+    "productos": [
+      { "id": 601, "nombre": "Platillo Especial", "precio": 120, "img": "https://lh3.googleusercontent.com/gps-cs-s/AHVAweqCO5-Xko1PHhTPCQh277cGvD-9ru6pkX7H0GMT_h_r2ROFd1hZ3QMAjv9pw5p_DmXbFp_yczCMatC_XCTVrFXzcC_4aMDox3QW8iDiKyOzWUelGLuMSDlFdn2Uuyqn_hHgfL4j=w122-h92-k-no" }
     ]
   },
   {
-    id: 7,
-    nombre: "Gorditas Doña Lola",
-    categoria: "gorditas",
-    telefono: "521234567896",
-    descripcion: "Gorditas de harina y maíz rellenas de guisos caseros.",
-    ubicacion: "Esq. con Juárez",
-    mapa: "https://goo.gl/maps/example7",
-    imagen: "https://images.unsplash.com/photo-1624300629298-e9de39c13be5?w=800",
-    productos: [
-      { id: 701, nombre: "Gordita Chicharrón", precio: 25, img: "https://images.unsplash.com/photo-1624300629298-e9de39c13be5?w=300" }
+    "id": 7,
+    "nombre": "Restaurante El Pueblito",
+    "categoria": "restaurante",
+    "telefono": "521234567890",
+    "descripcion": "Excelente lugar para desayunar y para comer , la sazón es excelente, y la atención de la señora es lo máximo",
+    "ubicacion": "Parral, Chih.",
+    "mapa": "https://www.google.com/maps/search/restaurantes+en+Parral/@26.9124995,-105.6833537,13z/data=!3m1!4b1?entry=ttu&g_ep=EgoyMDI2MDMxMS4wIKXMDSoASAFQAw%3D%3D",
+    "imagen": "http://googleusercontent.com/profile/picture/21",
+    "productos": [
+      { "id": 701, "nombre": "Platillo Especial", "precio": 120, "img": "http://googleusercontent.com/profile/picture/21" }
     ]
   },
   {
-    id: 8,
-    nombre: "El Rey del Burrito",
-    categoria: "burritos",
-    telefono: "521234567897",
-    descripcion: "Burritos estilo norteño con tortillas de harina recién hechas.",
-    ubicacion: "Blvd. Central #44",
-    mapa: "https://goo.gl/maps/example8",
-    imagen: "https://images.unsplash.com/photo-1584031036380-3fb6f2d51882?w=800",
-    productos: [
-      { id: 801, nombre: "Burrito de Asada", precio: 70, img: "https://images.unsplash.com/photo-1626700051175-656fc7cd3178?w=300" }
+    "id": 8,
+    "nombre": "Restaurante Hereford",
+    "categoria": "restaurante",
+    "telefono": "521234567890",
+    "descripcion": "La carne muy rica ,el corte excelente el servicio muy bien y el lugar muy acogedor lo recomiendo ampliamente",
+    "ubicacion": "Parral, Chih.",
+    "mapa": "https://www.google.com/maps/search/restaurantes+en+Parral/@26.9124995,-105.6833537,13z/data=!3m1!4b1?entry=ttu&g_ep=EgoyMDI2MDMxMS4wIKXMDSoASAFQAw%3D%3D",
+    "imagen": "http://googleusercontent.com/profile/picture/22",
+    "productos": [
+      { "id": 801, "nombre": "Platillo Especial", "precio": 120, "img": "http://googleusercontent.com/profile/picture/22" }
     ]
   },
   {
-    id: 9,
-    nombre: "Wings & Boneless",
-    categoria: "bonles",
-    telefono: "521234567898",
-    descripcion: "Boneless crujientes con 12 salsas diferentes a elegir.",
-    ubicacion: "Plaza Food #8",
-    mapa: "https://goo.gl/maps/example9",
-    imagen: "https://images.unsplash.com/photo-1527477396000-e27163b481c2?w=800",
-    productos: [
-      { id: 901, nombre: "Boneless BBQ", precio: 140, img: "https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=300" }
+    "id": 9,
+    "nombre": "Restaurante El Gran Parral",
+    "categoria": "restaurante",
+    "telefono": "521234567890",
+    "descripcion": "Un restaurante un poco clásico pero una comida bastante buena el trato fue excelente",
+    "ubicacion": "Parral, Chih.",
+    "mapa": "https://www.google.com/maps/search/restaurantes+en+Parral/@26.9124995,-105.6833537,13z/data=!3m1!4b1?entry=ttu&g_ep=EgoyMDI2MDMxMS4wIKXMDSoASAFQAw%3D%3D",
+    "imagen": "http://googleusercontent.com/profile/picture/23",
+    "productos": [
+      { "id": 901, "nombre": "Platillo Especial", "precio": 120, "img": "http://googleusercontent.com/profile/picture/23" }
     ]
   },
   {
-    id: 10,
-    nombre: "Monster Burger",
-    categoria: "hamburguesas",
-    telefono: "521234567899",
-    descripcion: "Hamburguesas al carbón con doble carne y mucho queso.",
-    ubicacion: "Av. de la Paz #200",
-    mapa: "https://goo.gl/maps/example10",
-    imagen: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800",
-    productos: [
-      { id: 1001, nombre: "Classic Burger", precio: 110, img: "https://images.unsplash.com/photo-1550547660-d9450f859349?w=300" }
+    "id": 10,
+    "nombre": "Gastro-Bar Las Quince Letras",
+    "categoria": "restaurante",
+    "telefono": "521234567890",
+    "descripcion": "Comida de lo más rico y con un sazón increíble que hemos probado en Parral.",
+    "ubicacion": "Parral, Chih.",
+    "mapa": "https://www.google.com/maps/search/restaurantes+en+Parral/@26.9124995,-105.6833537,13z/data=!3m1!4b1?entry=ttu&g_ep=EgoyMDI2MDMxMS4wIKXMDSoASAFQAw%3D%3D",
+    "imagen": "http://googleusercontent.com/profile/picture/24",
+    "productos": [
+      { "id": 1001, "nombre": "Platillo Especial", "precio": 120, "img": "http://googleusercontent.com/profile/picture/24" }
     ]
   },
   {
-    id: 11,
-    nombre: "Dogo Profe",
-    categoria: "hot dos",
-    telefono: "521234567800",
-    descripcion: "Los dogos más famosos de la cuadra con su cebollita preparada.",
-    ubicacion: "Calle del Hambre #1",
-    mapa: "https://goo.gl/maps/example11",
-    imagen: "https://images.unsplash.com/photo-1541234406181-49439a3e680a?w=800",
-    productos: [
-      { id: 1101, nombre: "Hot Dog Sencillo", precio: 40, img: "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=300" }
+    "id": 11,
+    "nombre": "Parrilla El Chon",
+    "categoria": "parrilla",
+    "telefono": "521234567890",
+    "descripcion": "Excelente restaurante de carnes y parrilladas.",
+    "ubicacion": "Parral, Chih.",
+    "mapa": "https://www.google.com/maps/search/restaurantes+en+Parral/@26.9124995,-105.6833537,13z/data=!3m1!4b1?entry=ttu&g_ep=EgoyMDI2MDMxMS4wIKXMDSoASAFQAw%3D%3D",
+    "imagen": "http://googleusercontent.com/profile/picture/25",
+    "productos": [
+      { "id": 1101, "nombre": "Platillo Especial", "precio": 120, "img": "http://googleusercontent.com/profile/picture/25" }
+    ]
+  },
+  {
+    "id": 12,
+    "nombre": "Mariscos El Ostión",
+    "categoria": "marisco",
+    "telefono": "521234567890",
+    "descripcion": "Los mejores mariscos frescos de la zona.",
+    "ubicacion": "Parral, Chih.",
+    "mapa": "https://www.google.com/maps/search/restaurantes+en+Parral/@26.9124995,-105.6833537,13z/data=!3m1!4b1?entry=ttu&g_ep=EgoyMDI2MDMxMS4wIKXMDSoASAFQAw%3D%3D",
+    "imagen": "http://googleusercontent.com/profile/picture/26",
+    "productos": [
+      { "id": 1201, "nombre": "Platillo Especial", "precio": 120, "img": "http://googleusercontent.com/profile/picture/26" }
     ]
   }
 ];
