@@ -130,7 +130,7 @@ function App() {
       {/* FOOTER CON CORAZÓN */}
       <footer className="max-w-6xl mx-auto w-full mt-20 pt-10 border-t border-white/5 text-center">
         <p className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500 mb-2">
-          Hecho con un <span className="text-red-500">❤️</span> para la comunidad
+          Hecho con <span className="text-red-500">❤️</span> by Creators
         </p>
         <p className="text-[8px] font-bold text-gray-700 uppercase tracking-widest">
           &copy; 2026 Parral, Chihuahua. Todos los derechos reservados.
