@@ -10,15 +10,13 @@ export default function Tarjeta({ negocio, esFavorito, onToggleFav }) {
     window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank');
   };
 
-  // Estilo para la animación de entrada
   const animacionEstilo = {
     animation: 'fadeInUp 0.6s ease-out forwards',
-    opacity: 0, // Empieza invisible
+    opacity: 0,
   };
 
   return (
     <>
-      {/* Añadimos una etiqueta <style> temporal aquí mismo para que funcione sí o sí */}
       <style>{`
         @keyframes fadeInUp {
           from { opacity: 0; transform: translateY(20px); }
@@ -31,22 +29,30 @@ export default function Tarjeta({ negocio, esFavorito, onToggleFav }) {
         className="bg-[#1E1E1E] rounded-[2.5rem] overflow-hidden border border-white/5 shadow-2xl relative flex flex-col group transition-all duration-500 hover:border-[#8B5CF6]/30"
       >
         
-        {/* BOTÓN FAVORITO */}
+        {/* BOTÓN FAVORITO (Blanco Fuerte Inactivo vs Amarillo Activo) */}
         <button 
           onClick={() => onToggleFav(negocio.id)}
-          className="absolute top-4 left-4 z-20 bg-black/40 backdrop-blur-md w-10 h-10 rounded-2xl flex items-center justify-center border border-white/10 hover:scale-110 active:scale-90 transition-all"
+          className={`absolute top-4 left-4 z-20 bg-black/60 backdrop-blur-xl w-12 h-12 rounded-[1.25rem] flex items-center justify-center border transition-all shadow-lg hover:scale-110 active:scale-90 ${
+            esFavorito ? 'border-yellow-400/50' : 'border-white/20'
+          }`}
         >
-          <span className={`text-lg ${esFavorito ? 'text-yellow-400' : 'text-white/20'}`}>
-            {esFavorito ? '⭐' : '☆'}
+          <span 
+            className={`text-2xl transition-all duration-300 ${
+              esFavorito 
+              ? 'text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.6)]' 
+              : 'text-white/80' 
+            }`}
+          >
+            ★
           </span>
         </button>
 
         {/* BOTÓN UBICACIÓN */}
         <button 
           onClick={abrirMapa}
-          className="absolute top-4 right-4 z-20 bg-black/40 backdrop-blur-md w-10 h-10 rounded-2xl flex items-center justify-center border border-white/10 hover:scale-110 active:scale-90 transition-all hover:bg-[#8B5CF6]/20"
+          className="absolute top-4 right-4 z-20 bg-black/60 backdrop-blur-xl w-12 h-12 rounded-[1.25rem] flex items-center justify-center border border-white/20 hover:scale-110 active:scale-90 transition-all hover:bg-[#8B5CF6]/30 shadow-lg"
         >
-          <span className="text-lg">📍</span>
+          <span className="text-xl">📍</span>
         </button>
 
         {/* IMAGEN Y DEGRADADO */}
