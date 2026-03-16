@@ -9,13 +9,11 @@ function App() {
   const [verFavoritos, setVerFavoritos] = useState(false);
   const [favoritos, setFavoritos] = useState([]);
 
-  // Función para favoritos con explosión central
   const toggleFavorito = (id) => {
     if (favoritos.includes(id)) {
       setFavoritos(favoritos.filter(favId => favId !== id));
     } else {
       setFavoritos([...favoritos, id]);
-      
       confetti({
         particleCount: 150,
         spread: 70,
@@ -27,7 +25,6 @@ function App() {
     }
   };
 
-  // Lógica de filtrado unificada
   const localesFiltrados = locales.filter(loc => {
     const coincideBusca = loc.nombre.toLowerCase().includes(busqueda.toLowerCase());
     const coincideFiltro = filtro === 'TODO' || loc.categoria === filtro;
@@ -38,15 +35,14 @@ function App() {
   const categorias = ['TODO', 'RESTAURANTE', 'PARRILLA', 'MARISCO', 'BAR'];
 
   return (
-    <div className="min-h-screen bg-[#121212] text-white p-6 pb-24 font-sans selection:bg-[#8B5CF6]/30">
+    <div className="min-h-screen bg-[#121212] text-white p-6 pb-12 font-sans flex flex-col">
       
       {/* HEADER CENTRAL */}
-      <header className="max-w-6xl mx-auto mb-10 flex flex-col items-center">
+      <header className="max-w-6xl mx-auto mb-10 flex flex-col items-center w-full">
         <h1 className="text-5xl font-black italic uppercase tracking-tighter mb-8 leading-none">
           ISDELY<span className="text-[#8B5CF6]">.</span>
         </h1>
         
-        {/* BUSCADOR Y BOTÓN FAVS */}
         <div className="w-full max-w-3xl flex gap-3 mb-8 items-stretch">
           <div className="relative flex-1">
             <input 
@@ -82,20 +78,17 @@ function App() {
           </button>
         </div>
 
-        {/* CATEGORÍAS CON SCROLL LATERAL (RECUPERADO) */}
+        {/* CATEGORÍAS */}
         <div className="w-full max-w-2xl overflow-x-auto pb-2 no-scrollbar">
           <div className="flex justify-start md:justify-center gap-2.5 min-w-max px-4">
             {categorias.map(cat => (
               <button
                 key={cat}
-                onClick={() => {
-                  setFiltro(cat);
-                  setVerFavoritos(false);
-                }}
+                onClick={() => { setFiltro(cat); setVerFavoritos(false); }}
                 className={`px-5 py-2.5 rounded-xl text-[10px] font-black tracking-[0.2em] uppercase transition-all border whitespace-nowrap ${
                   filtro === cat 
                   ? 'bg-[#8B5CF6]/10 border-[#8B5CF6] text-white shadow-md shadow-[#8B5CF6]/10' 
-                  : 'bg-[#1A1A1A] border-white/5 text-gray-500 hover:border-white/10 hover:text-gray-300'
+                  : 'bg-[#1A1A1A] border-white/5 text-gray-500'
                 }`}
               >
                 {cat}
@@ -106,7 +99,7 @@ function App() {
       </header>
 
       {/* GRID DE LOCALES */}
-      <main className="max-w-6xl mx-auto">
+      <main className="max-w-6xl mx-auto flex-1 w-full">
         {localesFiltrados.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {localesFiltrados.map(loc => (
@@ -126,6 +119,16 @@ function App() {
           </div>
         )}
       </main>
+
+      {/* FOOTER RESTAURADO CON CORAZÓN */}
+      <footer className="max-w-6xl mx-auto w-full mt-20 pt-10 border-t border-white/5 text-center">
+        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500 mb-2">
+          Hecho con <span className="text-red-500">❤️</span> by Creators
+        </p>
+        <p className="text-[8px] font-bold text-gray-700 uppercase tracking-widest">
+          &copy; 2026 Parral, Chihuahua. Todos los derechos reservados.
+        </p>
+      </footer>
     </div>
   );
 }
