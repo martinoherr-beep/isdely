@@ -26,13 +26,13 @@ export default function Tarjeta({ negocio, esFavorito, onToggleFav }) {
 
       <div 
         style={animacionEstilo}
-        className="bg-[#1E1E1E] rounded-[2.5rem] overflow-hidden border border-white/5 shadow-2xl relative flex flex-col group transition-all duration-500 hover:border-[#8B5CF6]/30"
+        className="bg-[#1E1E1E] rounded-[2.5rem] overflow-hidden border border-white/5 shadow-2xl relative flex flex-col h-full group transition-all duration-500 hover:border-[#8B5CF6]/30"
       >
         
-        {/* BOTÓN FAVORITO (Blanco Fuerte Inactivo vs Amarillo Activo) */}
+        {/* BOTÓN FAVORITO */}
         <button 
           onClick={() => onToggleFav(negocio.id)}
-          className={`absolute top-4 left-4 z-20 bg-black/60 backdrop-blur-xl w-12 h-12 rounded-[1.25rem] flex items-center justify-center border transition-all shadow-lg hover:scale-110 active:scale-90 ${
+          className={`absolute top-4 left-4 z-20 bg-black/50 backdrop-blur-xl w-12 h-12 rounded-[1.25rem] flex items-center justify-center border transition-all shadow-lg hover:scale-110 active:scale-90 ${
             esFavorito ? 'border-yellow-400/50' : 'border-white/20'
           }`}
         >
@@ -50,13 +50,13 @@ export default function Tarjeta({ negocio, esFavorito, onToggleFav }) {
         {/* BOTÓN UBICACIÓN */}
         <button 
           onClick={abrirMapa}
-          className="absolute top-4 right-4 z-20 bg-black/60 backdrop-blur-xl w-12 h-12 rounded-[1.25rem] flex items-center justify-center border border-white/20 hover:scale-110 active:scale-90 transition-all hover:bg-[#8B5CF6]/30 shadow-lg"
+          className="absolute top-4 right-4 z-20 bg-black/50 backdrop-blur-xl w-12 h-12 rounded-[1.25rem] flex items-center justify-center border border-white/20 hover:scale-110 active:scale-90 transition-all hover:bg-[#8B5CF6]/30 shadow-lg"
         >
           <span className="text-xl">📍</span>
         </button>
 
-        {/* IMAGEN Y DEGRADADO */}
-        <div className="h-44 overflow-hidden bg-[#252525] relative">
+        {/* IMAGEN */}
+        <div className="h-44 overflow-hidden bg-[#252525] relative flex-shrink-0">
           <img 
             src={negocio.imagen} 
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
@@ -66,8 +66,8 @@ export default function Tarjeta({ negocio, esFavorito, onToggleFav }) {
           <div className="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-[#1E1E1E] to-transparent pointer-events-none"></div>
         </div>
 
-        {/* CONTENIDO */}
-        <div className="p-6 pt-2 flex flex-col flex-1">
+        {/* CONTENIDO FLEXIBLE */}
+        <div className="p-6 pt-4 flex flex-col flex-grow">
           <div className="mb-2">
             <span className="text-[#8B5CF6] text-[8px] font-black uppercase tracking-widest bg-[#8B5CF6]/10 px-2 py-0.5 rounded">
               {negocio.categoria}
@@ -78,10 +78,12 @@ export default function Tarjeta({ negocio, esFavorito, onToggleFav }) {
             {negocio.nombre}
           </h3>
 
-          <p className="text-gray-400 text-[11px] leading-relaxed mb-6 line-clamp-2 h-8">
+          {/* DESCRIPCIÓN: Sin límite de altura para que la tarjeta crezca */}
+          <p className="text-gray-400 text-[11px] leading-relaxed mb-6">
             {negocio.descripcion}
           </p>
           
+          {/* BOTONES: El mt-auto los mantiene siempre abajo */}
           <div className="flex gap-2 mt-auto">
             <button 
               onClick={() => setIsModalOpen(true)} 
