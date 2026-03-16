@@ -1,0 +1,16 @@
+{
+  "short_name": "Isdely",
+  "name": "Isdely | Directorio Local",
+  "icons": [
+    {
+      "src": "logo-isdely.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#121212",
+  "background_color": "#121212"
+}
