@@ -1,82 +1,78 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import ModalMenu from './ModalMenu';
 
 export default function Tarjeta({ negocio, esFavorito, onToggleFav }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const fallbackImage = "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800";
+  const fallbackImage = "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800";
+
+  // Función para abrir Google Maps con la dirección
+  const abrirMapa = () => {
+    const query = encodeURIComponent(`${negocio.nombre} Parral Chihuahua`);
+    window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank');
+  };
 
   return (
     <>
-      {/* Cambiamos h-full por h-auto para que no se corte el texto */}
-      <div className="bg-[#1E1E1E] rounded-[2.5rem] overflow-hidden border border-white/5 hover:border-[#8B5CF6]/40 transition-all duration-500 shadow-2xl relative flex flex-col h-auto min-h-full group">
+      <div className="bg-[#1E1E1E] rounded-[2.5rem] overflow-hidden border border-white/5 shadow-2xl relative flex flex-col group transition-all duration-500 hover:border-[#8B5CF6]/30">
         
-        {/* Botones Flotantes */}
+        {/* BOTÓN FAVORITO (Izquierda) */}
         <button 
-          onClick={onToggleFav} 
-          className="absolute top-4 left-4 z-30 bg-black/60 backdrop-blur-md w-10 h-10 rounded-2xl border border-white/10 flex items-center justify-center hover:scale-110 active:scale-90 transition-all"
+          onClick={() => onToggleFav(negocio.id)}
+          className="absolute top-4 left-4 z-20 bg-black/40 backdrop-blur-md w-10 h-10 rounded-2xl flex items-center justify-center border border-white/10 hover:scale-110 active:scale-90 transition-all"
         >
-          <span className={`text-lg leading-none ${esFavorito ? 'text-yellow-400' : 'text-white/30'}`}>
+          <span className={`text-lg ${esFavorito ? 'text-yellow-400' : 'text-white/20'}`}>
             {esFavorito ? '⭐' : '☆'}
           </span>
         </button>
 
-        <a 
-          href={negocio.mapa} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="absolute top-4 right-4 z-30 bg-black/60 backdrop-blur-md w-10 h-10 rounded-2xl border border-white/10 flex items-center justify-center hover:bg-[#8B5CF6] transition-all group/map"
-          onClick={(e) => e.stopPropagation()}
+        {/* BOTÓN UBICACIÓN (Derecha - Nuevo Pin) */}
+        <button 
+          onClick={abrirMapa}
+          className="absolute top-4 right-4 z-20 bg-black/40 backdrop-blur-md w-10 h-10 rounded-2xl flex items-center justify-center border border-white/10 hover:scale-110 active:scale-90 transition-all hover:bg-[#8B5CF6]/20"
+          title="Ver ubicación"
         >
-          <span className="text-lg block group-hover/map:animate-bounce">📍</span>
-        </a>
+          <span className="text-lg">📍</span>
+        </button>
 
-        {/* Imagen - Reducimos un poco la altura en móvil (h-48) y más alta en PC (md:h-56) */}
-        <div className="relative h-48 md:h-56 w-full bg-[#252525] overflow-hidden">
+        {/* IMAGEN Y DEGRADADO */}
+        <div className="h-44 overflow-hidden bg-[#252525] relative">
           <img 
             src={negocio.imagen} 
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" 
-            alt={negocio.nombre} 
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = fallbackImage;
-            }}
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+            alt={negocio.nombre}
+            onError={(e) => { e.target.src = fallbackImage; }}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#1E1E1E] via-transparent to-transparent opacity-90" />
-          
-          <span className="absolute bottom-4 right-6 bg-[#8B5CF6] text-[9px] font-black px-4 py-2 rounded-xl uppercase tracking-[0.2em] shadow-lg z-10">
-            {negocio.categoria}
-          </span>
+          <div className="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-[#1E1E1E] to-transparent pointer-events-none"></div>
         </div>
 
-        {/* Contenido - Reducimos padding en móvil (p-6) y aumentamos en PC (md:p-8) */}
-        <div className="p-6 md:p-8 flex flex-col flex-grow">
-          <h3 className="text-xl md:text-2xl font-black mb-2 group-hover:text-[#8B5CF6] transition-colors italic uppercase tracking-tighter leading-tight">
-            {negocio.nombre}
-          </h3>
-          
-          <div className="flex items-center gap-2 mb-3 text-[#8B5CF6] italic text-[10px] font-bold">
-             <span className="w-1.5 h-1.5 rounded-full bg-[#8B5CF6] animate-pulse"></span> 
-             <span className="text-gray-500 truncate">{negocio.ubicacion}</span>
+        {/* CONTENIDO */}
+        <div className="p-6 pt-2 flex flex-col flex-1">
+          <div className="mb-2">
+            <span className="text-[#8B5CF6] text-[8px] font-black uppercase tracking-widest bg-[#8B5CF6]/10 px-2 py-0.5 rounded">
+              {negocio.categoria}
+            </span>
           </div>
 
-          {/* Eliminamos el h-10 fijo para que la descripción use el espacio que necesite */}
-          <p className="text-gray-400 text-sm mb-6 font-light leading-relaxed">
+          <h3 className="text-lg font-black italic uppercase text-white mb-2 leading-none">
+            {negocio.nombre}
+          </h3>
+
+          <p className="text-gray-400 text-[11px] leading-relaxed mb-6 line-clamp-2 h-8">
             {negocio.descripcion}
           </p>
           
-          <div className="flex gap-3 mt-auto pt-2">
+          <div className="flex gap-2 mt-auto">
             <button 
-              onClick={() => setIsModalOpen(true)}
-              className="flex-1 py-3.5 md:py-4 bg-white/5 rounded-2xl text-[9px] md:text-[10px] font-black uppercase tracking-widest hover:bg-white/10 transition-all border border-white/5"
+              onClick={() => setIsModalOpen(true)} 
+              className="flex-1 py-3 bg-white/5 rounded-xl text-[9px] font-black uppercase text-white hover:bg-white/10 transition-all border border-white/5"
             >
               Menú
             </button>
-            
             <a 
               href={`https://wa.me/${negocio.telefono}`} 
               target="_blank" 
               rel="noreferrer"
-              className="flex-1 py-3.5 md:py-4 bg-[#8B5CF6] rounded-2xl text-[9px] md:text-[10px] font-black uppercase tracking-widest hover:bg-[#7C3AED] shadow-lg shadow-[#8B5CF6]/30 transition-all text-center flex items-center justify-center"
+              className="flex-1 py-3 bg-[#8B5CF6] rounded-xl text-[9px] font-black uppercase text-center text-white hover:bg-[#7C3AED] transition-all"
             >
               WhatsApp
             </a>
