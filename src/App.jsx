@@ -8,7 +8,8 @@ function App() {
   const [busqueda, setBusqueda] = useState("");
   const [filtro, setFiltro] = useState("Todos");
   const [mostrarSoloFavs, setMostrarSoloFavs] = useState(false);
-  
+  // Esta línea genera la lista de categorías basándose en tu data.js
+const categorias = ["Todos", ...new Set(locales.map(l => l.categoria))];
   const [favoritos, setFavoritos] = useState(() => {
     const guardados = localStorage.getItem('isdely_favs');
     return guardados ? JSON.parse(guardados) : [];
@@ -81,19 +82,24 @@ function App() {
         </div>
       </header>
 
-      <nav className="flex justify-center gap-2 mb-12 flex-wrap">
-        {["Todos", ...new Set(locales.map(l => l.categoria))].map(cat => (
-          <button 
-            key={cat} 
-            onClick={() => { setFiltro(cat); setMostrarSoloFavs(false); }}
-            className={`px-5 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
-              filtro === cat && !mostrarSoloFavs ? 'bg-white text-black' : 'bg-[#1E1E1E] text-gray-500'
-            }`}
-          >
-            {cat}
-          </button>
-        ))}
-      </nav>
+  {/* Navegación de Categorías Deslizable */}
+<nav className="flex justify-start md:justify-center gap-2 mb-12 overflow-x-auto pb-4 no-scrollbar scroll-smooth">
+  <div className="flex gap-2 px-2">
+    {categorias.map(cat => (
+      <button 
+        key={cat} 
+        onClick={() => { setFiltro(cat); setMostrarSoloFavs(false); }}
+        className={`px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap shadow-xl ${
+          filtro === cat && !mostrarSoloFavs 
+          ? 'bg-white text-black scale-105' 
+          : 'bg-[#1E1E1E] text-gray-500 hover:text-white border border-white/5'
+        }`}
+      >
+        {cat}
+      </button>
+    ))}
+  </div>
+</nav>
 
       <main className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
         {locales
@@ -109,6 +115,25 @@ function App() {
             />
           ))}
       </main>
+    <footer className="mt-20 py-10 border-t border-white/5 text-center flex flex-col items-center gap-4">
+  <div className="text-2xl font-black italic tracking-tighter opacity-50">
+    Isdely<span className="text-[#8B5CF6]">.</span>
+  </div>
+  
+  <p className="text-gray-500 text-[10px] uppercase font-bold tracking-[0.4em]">
+    Hecho con ❤️ para la comunidad
+  </p>
+  
+  <div className="flex gap-6 mt-4">
+    {/* Puedes poner tus links reales aquí */}
+    <a href="#" className="text-gray-600 hover:text-[#8B5CF6] transition-colors text-xs uppercase font-black tracking-widest">Instagram</a>
+    <a href="#" className="text-gray-600 hover:text-[#8B5CF6] transition-colors text-xs uppercase font-black tracking-widest">Contacto</a>
+  </div>
+  
+  <p className="text-gray-700 text-[9px] mt-8 font-mono italic">
+    © 2026 Isdely App. Todos los derechos reservados.
+  </p>
+</footer>
     </div>
   );
 }
