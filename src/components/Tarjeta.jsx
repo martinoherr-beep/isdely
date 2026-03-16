@@ -10,24 +10,9 @@ export default function Tarjeta({ negocio, esFavorito, onToggleFav }) {
     window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank');
   };
 
-  const animacionEstilo = {
-    animation: 'fadeInUp 0.6s ease-out forwards',
-    opacity: 0,
-  };
-
   return (
     <>
-      <style>{`
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-      `}</style>
-
-      <div 
-        style={animacionEstilo}
-        className="bg-[#1E1E1E] rounded-[2.5rem] overflow-hidden border border-white/5 shadow-2xl relative flex flex-col h-full group transition-all duration-500 hover:border-[#8B5CF6]/30"
-      >
+      <div className="bg-[#1E1E1E] rounded-[2.5rem] overflow-hidden border border-white/5 shadow-2xl relative flex flex-col h-full group transition-all duration-500 hover:border-[#8B5CF6]/30 animate-fade-in-up">
         
         {/* BOTÓN FAVORITO */}
         <button 
@@ -36,13 +21,7 @@ export default function Tarjeta({ negocio, esFavorito, onToggleFav }) {
             esFavorito ? 'border-yellow-400/50' : 'border-white/20'
           }`}
         >
-          <span 
-            className={`text-2xl transition-all duration-300 ${
-              esFavorito 
-              ? 'text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.6)]' 
-              : 'text-white/80' 
-            }`}
-          >
+          <span className={`text-2xl transition-all duration-300 ${esFavorito ? 'text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.6)]' : 'text-white/80'}`}>
             ★
           </span>
         </button>
@@ -66,7 +45,7 @@ export default function Tarjeta({ negocio, esFavorito, onToggleFav }) {
           <div className="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-[#1E1E1E] to-transparent pointer-events-none"></div>
         </div>
 
-        {/* CONTENIDO FLEXIBLE */}
+        {/* CONTENIDO FLEXIBLE (CRECE SEGÚN DESCRIPCIÓN) */}
         <div className="p-6 pt-4 flex flex-col flex-grow">
           <div className="mb-2">
             <span className="text-[#8B5CF6] text-[8px] font-black uppercase tracking-widest bg-[#8B5CF6]/10 px-2 py-0.5 rounded">
@@ -78,12 +57,11 @@ export default function Tarjeta({ negocio, esFavorito, onToggleFav }) {
             {negocio.nombre}
           </h3>
 
-          {/* DESCRIPCIÓN: Sin límite de altura para que la tarjeta crezca */}
           <p className="text-gray-400 text-[11px] leading-relaxed mb-6">
             {negocio.descripcion}
           </p>
           
-          {/* BOTONES: El mt-auto los mantiene siempre abajo */}
+          {/* BOTONES SIEMPRE ABAJO */}
           <div className="flex gap-2 mt-auto">
             <button 
               onClick={() => setIsModalOpen(true)} 
