@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import confetti from 'canvas-confetti'; 
 import { locales } from './data';
 import Tarjeta from './components/Tarjeta';
+import Splash from './components/Splash'; // Importamos tu Splash
 
 function App() {
+  const [showSplash, setShowSplash] = useState(true); // Estado para el Splash
   const [busqueda, setBusqueda] = useState('');
   const [filtro, setFiltro] = useState('TODO');
   const [verFavoritos, setVerFavoritos] = useState(false);
@@ -34,8 +36,13 @@ function App() {
 
   const categorias = ['TODO', 'RESTAURANTE', 'PARRILLA', 'MARISCO', 'BAR'];
 
+  // Si el Splash está activo, solo mostramos el Splash
+  if (showSplash) {
+    return <Splash onFinish={() => setShowSplash(false)} />;
+  }
+
   return (
-    <div className="min-h-screen bg-[#121212] text-white p-6 pb-12 font-sans flex flex-col">
+    <div className="min-h-screen bg-[#121212] text-white p-6 pb-12 font-sans flex flex-col animate-in fade-in duration-700">
       
       {/* HEADER CENTRAL */}
       <header className="max-w-6xl mx-auto mb-10 flex flex-col items-center w-full">
@@ -88,7 +95,7 @@ function App() {
                 className={`px-5 py-2.5 rounded-xl text-[10px] font-black tracking-[0.2em] uppercase transition-all border whitespace-nowrap ${
                   filtro === cat 
                   ? 'bg-[#8B5CF6]/10 border-[#8B5CF6] text-white shadow-md shadow-[#8B5CF6]/10' 
-                  : 'bg-[#1A1A1A] border-white/5 text-gray-500'
+                  : 'bg-[#1A1A1A] border-white/5 text-gray-500 hover:text-gray-300'
                 }`}
               >
                 {cat}
@@ -120,10 +127,10 @@ function App() {
         )}
       </main>
 
-      {/* FOOTER RESTAURADO CON CORAZÓN */}
+      {/* FOOTER CON CORAZÓN */}
       <footer className="max-w-6xl mx-auto w-full mt-20 pt-10 border-t border-white/5 text-center">
         <p className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500 mb-2">
-          Hecho con <span className="text-red-500">❤️</span> by Creators
+          Hecho con un <span className="text-red-500">❤️</span> para la comunidad
         </p>
         <p className="text-[8px] font-bold text-gray-700 uppercase tracking-widest">
           &copy; 2026 Parral, Chihuahua. Todos los derechos reservados.
