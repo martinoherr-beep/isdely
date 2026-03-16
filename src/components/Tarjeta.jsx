@@ -5,17 +5,33 @@ export default function Tarjeta({ negocio, esFavorito, onToggleFav }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const fallbackImage = "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800";
 
-  // Función para abrir Google Maps con la dirección
   const abrirMapa = () => {
     const query = encodeURIComponent(`${negocio.nombre} Parral Chihuahua`);
     window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank');
   };
 
+  // Estilo para la animación de entrada
+  const animacionEstilo = {
+    animation: 'fadeInUp 0.6s ease-out forwards',
+    opacity: 0, // Empieza invisible
+  };
+
   return (
     <>
-      <div className="bg-[#1E1E1E] rounded-[2.5rem] overflow-hidden border border-white/5 shadow-2xl relative flex flex-col group transition-all duration-500 hover:border-[#8B5CF6]/30">
+      {/* Añadimos una etiqueta <style> temporal aquí mismo para que funcione sí o sí */}
+      <style>{`
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
+
+      <div 
+        style={animacionEstilo}
+        className="bg-[#1E1E1E] rounded-[2.5rem] overflow-hidden border border-white/5 shadow-2xl relative flex flex-col group transition-all duration-500 hover:border-[#8B5CF6]/30"
+      >
         
-        {/* BOTÓN FAVORITO (Izquierda) */}
+        {/* BOTÓN FAVORITO */}
         <button 
           onClick={() => onToggleFav(negocio.id)}
           className="absolute top-4 left-4 z-20 bg-black/40 backdrop-blur-md w-10 h-10 rounded-2xl flex items-center justify-center border border-white/10 hover:scale-110 active:scale-90 transition-all"
@@ -25,11 +41,10 @@ export default function Tarjeta({ negocio, esFavorito, onToggleFav }) {
           </span>
         </button>
 
-        {/* BOTÓN UBICACIÓN (Derecha - Nuevo Pin) */}
+        {/* BOTÓN UBICACIÓN */}
         <button 
           onClick={abrirMapa}
           className="absolute top-4 right-4 z-20 bg-black/40 backdrop-blur-md w-10 h-10 rounded-2xl flex items-center justify-center border border-white/10 hover:scale-110 active:scale-90 transition-all hover:bg-[#8B5CF6]/20"
-          title="Ver ubicación"
         >
           <span className="text-lg">📍</span>
         </button>
