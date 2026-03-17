@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import confetti from 'canvas-confetti'; 
 import { locales } from './data';
 import Tarjeta from './components/Tarjeta';
-import Splash from './components/Splash'; // Importamos tu Splash
+import Splash from './components/Splash';
 
 function App() {
-  const [showSplash, setShowSplash] = useState(true); // Estado para el Splash
+  const [showSplash, setShowSplash] = useState(true);
   const [busqueda, setBusqueda] = useState('');
   const [filtro, setFiltro] = useState('TODO');
   const [verFavoritos, setVerFavoritos] = useState(false);
@@ -36,16 +36,15 @@ function App() {
 
   const categorias = ['TODO', 'RESTAURANTE', 'PARRILLA', 'MARISCO', 'BAR'];
 
-  // Si el Splash está activo, solo mostramos el Splash
   if (showSplash) {
     return <Splash onFinish={() => setShowSplash(false)} />;
   }
 
   return (
-    <div className="min-h-screen bg-[#121212] text-white p-6 pb-12 font-sans flex flex-col animate-in fade-in duration-700">
+    <div className="min-h-screen bg-[#121212] text-white p-6 pb-12 font-sans flex flex-col">
       
       {/* HEADER CENTRAL */}
-      <header className="max-w-6xl mx-auto mb-10 flex flex-col items-center w-full">
+      <header className="max-w-6xl mx-auto mb-10 flex flex-col items-center w-full animate-in fade-in duration-1000">
         <h1 className="text-5xl font-black italic uppercase tracking-tighter mb-8 leading-none">
           ISDELY<span className="text-[#8B5CF6]">.</span>
         </h1>
@@ -85,7 +84,7 @@ function App() {
           </button>
         </div>
 
-        {/* CATEGORÍAS */}
+        {/* CATEGORÍAS CON SCROLL */}
         <div className="w-full max-w-2xl overflow-x-auto pb-2 no-scrollbar">
           <div className="flex justify-start md:justify-center gap-2.5 min-w-max px-4">
             {categorias.map(cat => (
@@ -95,7 +94,7 @@ function App() {
                 className={`px-5 py-2.5 rounded-xl text-[10px] font-black tracking-[0.2em] uppercase transition-all border whitespace-nowrap ${
                   filtro === cat 
                   ? 'bg-[#8B5CF6]/10 border-[#8B5CF6] text-white shadow-md shadow-[#8B5CF6]/10' 
-                  : 'bg-[#1A1A1A] border-white/5 text-gray-500 hover:text-gray-300'
+                  : 'bg-[#1A1A1A] border-white/5 text-gray-500'
                 }`}
               >
                 {cat}
@@ -105,21 +104,26 @@ function App() {
         </div>
       </header>
 
-      {/* GRID DE LOCALES */}
+      {/* GRID DE LOCALES CON EFECTO CASCADA */}
       <main className="max-w-6xl mx-auto flex-1 w-full">
         {localesFiltrados.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {localesFiltrados.map(loc => (
-              <Tarjeta 
+            {localesFiltrados.map((loc, index) => (
+              <div 
                 key={loc.id} 
-                negocio={loc} 
-                esFavorito={favoritos.includes(loc.id)} 
-                onToggleFav={toggleFavorito} 
-              />
+                className="animate-cascade"
+                style={{ animationDelay: `${index * 150}ms` }} // 150ms entre cada tarjeta
+              >
+                <Tarjeta 
+                  negocio={loc} 
+                  esFavorito={favoritos.includes(loc.id)} 
+                  onToggleFav={toggleFavorito} 
+                />
+              </div>
             ))}
           </div>
         ) : (
-          <div className="py-24 text-center">
+          <div className="py-24 text-center animate-in fade-in">
             <h3 className="text-gray-600 font-bold uppercase italic tracking-widest text-sm">
               No se encontraron locales
             </h3>
@@ -127,10 +131,10 @@ function App() {
         )}
       </main>
 
-      {/* FOOTER CON CORAZÓN */}
-      <footer className="max-w-6xl mx-auto w-full mt-20 pt-10 border-t border-white/5 text-center">
+      {/* FOOTER ORIGINAL */}
+      <footer className="max-w-6xl mx-auto w-full mt-20 pt-10 border-t border-white/5 text-center animate-in fade-in duration-1000">
         <p className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500 mb-2">
-          Hecho con <span className="text-red-500">❤️</span> by Creators
+          Hecho con un <span className="text-red-500">❤️</span> para la comunidad
         </p>
         <p className="text-[8px] font-bold text-gray-700 uppercase tracking-widest">
           &copy; 2026 Parral, Chihuahua. Todos los derechos reservados.

@@ -21,7 +21,7 @@ export default function Splash({ onFinish }) {
            <span className="text-5xl">🚀</span>
         </div>
         <h1 className="text-6xl font-black italic tracking-tighter text-white">
-          ISDELY<span className="text-[#8B5CF6]">.</span>
+          Isdely<span className="text-[#8B5CF6]">.</span>
         </h1>
         <p className="text-[#8B5CF6] text-[10px] font-bold uppercase tracking-[0.5em] mt-4 animate-pulse">
           Cerca de ti
