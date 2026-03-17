@@ -205,7 +205,7 @@
 .animate-marquee {
   display: flex;
   width: max-content; /* Importante para que no se corte el texto */
-  animation: marquee 30s linear infinite;
+  animation: marquee 20s linear infinite;
 }
 
 .marquee-container {
