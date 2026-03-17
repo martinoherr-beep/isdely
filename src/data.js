@@ -5,6 +5,7 @@ export const locales = [
     categoria: "RESTAURANTE",
     telefono: "526271234567",
     descripcion: "Experiencia culinaria de autor. Cortes selectos y mixología en un ambiente sofisticado.",
+    promo: "¡2x1 en Mixología todos los jueves!",
     ubicacion: "Av. Independencia, Centro",
     imagen: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=1000&auto=format&fit=crop",
     menu: [

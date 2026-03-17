@@ -42,7 +42,38 @@ function App() {
 
   return (
     <div className="min-h-screen bg-[#121212] text-white p-6 pb-12 font-sans flex flex-col">
-      
+{/* BANNER DE PROMO SUPERIOR - VERSIÓN FINAL ANTISCROLL */}
+{locales.some(l => l.promo) && (
+  <div 
+    className="-mx-6 -mt-6 mb-10 bg-[#8B5CF6]/30 backdrop-blur-xl py-3 border-b border-white/10 z-50 sticky top-0 overflow-hidden"
+    style={{ width: 'calc(100% + 3rem)' }} // 3rem compensa exactamente el p-6 de los lados (24px + 24px)
+  >
+    <div style={{ 
+      display: 'flex', 
+      width: 'max-content',
+      animation: 'marquee 30s linear infinite'
+    }}>
+      <style>{`
+        @keyframes marquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-33.33%); }
+        }
+      `}</style>
+
+      {[1, 2, 3].map((i) => (
+        <div key={i} className="flex items-center flex-nowrap">
+          {locales.filter(l => l.promo).map(l => (
+            <span key={l.id} className="mx-12 text-[10px] font-black uppercase tracking-[0.3em] text-white flex items-center gap-2 whitespace-nowrap">
+              <span className="text-sm">🔥</span> 
+              {l.nombre}: <span className="italic opacity-90">{l.promo}</span>
+              <span className="mx-8 opacity-30">|</span>
+            </span>
+          ))}
+        </div>
+      ))}
+    </div>
+  </div>
+)}
       {/* HEADER CENTRAL */}
       <header className="max-w-6xl mx-auto mb-10 flex flex-col items-center w-full animate-in fade-in duration-1000">
         <h1 className="text-5xl font-black italic uppercase tracking-tighter mb-8 leading-none">

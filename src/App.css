@@ -196,3 +196,27 @@
 .animate-fade-in-up {
   animation: fadeInSlide 0.6s ease-out forwards;
 }
+/* Animación de la franja de promos */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-33.333%); }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content; /* Importante para que no se corte el texto */
+  animation: marquee 30s linear infinite;
+}
+
+.marquee-container {
+  overflow: hidden;
+  width: 100%;
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+/* Esto mata la barra de desplazamiento horizontal de toda la página */
+html, body {
+  overflow-x: hidden;
+  position: relative;
+  width: 100%;
+}

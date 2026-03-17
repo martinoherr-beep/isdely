@@ -21,6 +21,13 @@ export default function Tarjeta({ negocio, esFavorito, onToggleFav }) {
             esFavorito ? 'border-yellow-400/50' : 'border-white/20'
           }`}
         >
+          {/* Dentro de Tarjeta.jsx, sobre la imagen */}
+{negocio.promo && (
+  <div className="absolute top-4 left-4 z-10 bg-[#8B5CF6] text-white text-[8px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-lg animate-pulse">
+    Promo Activa
+  </div>
+)}
+
           <span className={`text-2xl transition-all duration-300 ${esFavorito ? 'text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.6)]' : 'text-white/80'}`}>
             ★
           </span>
