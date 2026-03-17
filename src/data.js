@@ -5,7 +5,7 @@ export const locales = [
     categoria: "PARRILLA",
     telefono: "526278897648", 
     ubicacion: "Av. Independencia #45, Centro",
-    img: "https://images.unsplash.com/photo-1552332386-f8dd00dc2f85?q=80&w=800&auto=format&fit=crop",
+    img: "https://res.cloudinary.com/dvikeqkst/image/upload/v1773776113/FB_IMG_1773776002253_if9yy0.jpg",
     promo: "¡ORDEN DE TRIPA A PRECIO DE ADOBADA LOS MARTES!",
     menu: [
       {
@@ -31,7 +31,7 @@ export const locales = [
     categoria: "RESTAURANTE",
     telefono: "526279876543",
     ubicacion: "Vialidad del Río #12, San Antonio",
-    img: "https://images.unsplash.com/photo-1567620905732-2d1ec7bb7445?q=80&w=800&auto=format&fit=crop",
+    img: "https://res.cloudinary.com/dvikeqkst/image/upload/v1773776272/FB_IMG_1773776255361_xjyy7a.jpg",
     promo: "NIÑOS DESAYUNAN GRATIS SÁBADOS Y DOMINGOS",
     menu: [
       {
