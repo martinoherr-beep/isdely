@@ -25,11 +25,30 @@ export default function ModalMenu({ negocio, isOpen, onClose }) {
 
   const total = carrito.reduce((sum, p) => sum + p.precio, 0);
 
-  const enviarPedido = () => {
-    if (!nombre) return alert("Ingresa tu nombre");
-    if (carrito.length === 0) return alert("Carrito vacío");
-    const lista = carrito.map(p => `• ${p.nombre} ($${p.precio})`).join('\n');
-    const mensaje = encodeURIComponent(`*NUEVO PEDIDO*\n*Cliente:* ${nombre}\n*Local:* ${negocio.nombre}\n\n${lista}\n\n*TOTAL:* $${total}`);
+ const enviarPedido = () => {
+    if (!nombre) return alert("Por favor, ingresa tu nombre para el pedido.");
+    if (carrito.length === 0) return alert("Tu carrito está vacío.");
+
+    // Formateamos la lista de productos con un check para que se vea pro
+    const lista = carrito.map(p => `✅ *${p.nombre}* ($${p.precio})`).join('\n');
+
+    // CONSTRUCCIÓN DEL MENSAJE (Aquí ya incluimos el método)
+    const mensaje = encodeURIComponent(
+`*NUEVO PEDIDO DESDE ISDELY.* 🚀
+
+*CLIENTE:* ${nombre}
+*LOCAL:* ${negocio.nombre}
+*ENTREGA:* ${metodo} 🛵
+
+*PRODUCTOS:*
+------------------------------
+${lista}
+------------------------------
+💰 *TOTAL: $${total}*
+
+_Favor de confirmar recepción._`
+    );
+
     window.open(`https://wa.me/${negocio.telefono}?text=${mensaje}`, '_blank');
   };
 
