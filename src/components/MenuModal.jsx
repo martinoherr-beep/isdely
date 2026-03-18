@@ -77,23 +77,34 @@ const MenuModal = ({ negocio, onClose }) => {
   const totalPagar = useMemo(() => itemsCarrito.reduce((acc, p) => acc + (Number(p.precio) * p.cantidad), 0), [itemsCarrito]);
   const totalItems = useMemo(() => itemsCarrito.reduce((acc, p) => acc + p.cantidad, 0), [itemsCarrito]);
 
-  const enviarPedido = () => {
-  // 1. VALIDACIÓN DE NOMBRE (NUEVA)
-  if (!nombreCliente.trim()) {
-    alert("¡Por favor, ingresa tu nombre para que el negocio sepa quién hace el pedido!");
-    return;
-  }
+const enviarPedido = () => {
+    if (!nombreCliente.trim()) return alert("Por favor, ingresa tu nombre");
+    if (totalItems === 0) return alert("Tu carrito está vacío");
 
-  // 2. VALIDACIÓN DE CARRITO
-  if (totalItems === 0) {
-    alert("¡Agrega algo al carrito primero!");
-    return;
-  }
+    // Formatear la lista de productos con puntos y negritas
+    const detalleProductos = Object.values(carrito)
+      .map(p => `• *${p.cantidad}x* ${p.nombre.toUpperCase()} (_$${p.precio * p.cantidad}_)`)
+      .join('\n');
 
-  const lista = itemsCarrito.map(p => `*${p.cantidad}x* ${p.nombre} ($${p.precio * p.cantidad})`).join('\n');
-  const mensaje = `¡Hola ${negocio.nombre}!\nSoy *${nombreCliente}*\nPedido para *${metodoEntrega}*:\n\n${lista}\n\n*Total: $${totalPagar}*`;
-  window.open(`https://wa.me/${negocio.telefono}?text=${encodeURIComponent(mensaje)}`, '_blank');
-};
+    // Construcción del Ticket Profesional
+    const mensaje = [
+      `*📦 NUEVO PEDIDO - ${negocio.nombre.toUpperCase()}*`,
+      `━━━━━━━━━━━━━━`,
+      `*CLIENTE:* ${nombreCliente.trim().toUpperCase()}`,
+      `*MÉTODO:* ${metodoEntrega}`,
+      ``,
+      `*DETALLE:*`,
+      detalleProductos,
+      ``,
+      `*TOTAL A COBRAR: $${totalPagar}*`,
+      `━━━━━━━━━━━━━━`,
+      `_Pedido enviado vía Isdely Digital_`
+    ].join('\n');
+
+    // Abrir WhatsApp con el mensaje formateado
+    const url = `https://wa.me/${negocio.telefono}?text=${encodeURIComponent(mensaje)}`;
+    window.open(url, '_blank');
+  };
 
   return (
     <div className="fixed inset-0 z-[100] flex items-end md:items-center justify-center p-0 md:p-4 animate-in fade-in duration-200">
