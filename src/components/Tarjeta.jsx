@@ -5,9 +5,9 @@ export default function Tarjeta({ negocio, esFavorito, onToggleFav, onClick }) {
   const imagenPortada = negocio.imagen || negocio.img || fallback;
 
   // Enlaces de contacto
+  const linkLlamar = `tel:${negocio.telefono || ''}`;
+  const linkWhatsApp = `https://wa.me/${negocio.telefono || ''}`;
   
-const linkLlamar = `tel:${negocio.telefono || ''}`;
-const linkWhatsApp = `https://wa.me/${negocio.telefono || ''}`;
   // Enlace de Google Maps usando la ubicación de Firebase
   const linkMaps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${negocio.nombre}, ${negocio.ubicacion || 'Parral'}`)}`;
 
@@ -57,11 +57,19 @@ const linkWhatsApp = `https://wa.me/${negocio.telefono || ''}`;
            </span>
         </div>
         
-        <h3 className="text-3xl font-black italic uppercase text-white mb-5 leading-none tracking-tighter">
+        <h3 className="text-3xl font-black italic uppercase text-white mb-4 leading-none tracking-tighter">
           {negocio.nombre}
         </h3>
 
-        {/* BOTÓN DE UBICACIÓN DARK MORADO (Restaurado con icono pequeño) */}
+        {/* --- SECCIÓN DESCRIPCIÓN AÑADIDA --- */}
+        {negocio.descripcion && (
+          <p className="text-gray-400 text-xs font-medium leading-relaxed mb-6">
+            {negocio.descripcion}
+          </p>
+        )}
+        {/* ---------------------------------- */}
+
+        {/* BOTÓN DE UBICACIÓN DARK MORADO */}
         <a 
           href={linkMaps}
           target="_blank" 
@@ -69,7 +77,6 @@ const linkWhatsApp = `https://wa.me/${negocio.telefono || ''}`;
           onClick={(e) => e.stopPropagation()} 
           className="flex items-center gap-3.5 bg-[#2A2A2A]/40 hover:bg-[#8B5CF6]/10 p-3.5 rounded-2xl border border-white/5 hover:border-[#8B5CF6]/30 transition-all mb-6 group"
         >
-          {/* PEQUEÑO BOTÓN OSCURO CON ICONO */}
           <div className="w-9 h-9 bg-[#121212] rounded-xl border border-white/10 flex items-center justify-center shrink-0 group-hover:bg-[#8B5CF6] transition-colors shadow-inner">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-[#8B5CF6] group-hover:text-white transition-colors">
               <path fillRule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.847 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clipRule="evenodd" />
