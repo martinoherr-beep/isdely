@@ -1,97 +1,119 @@
-import React, { useState } from 'react';
-import ModalMenu from './ModalMenu';
+import React from 'react';
 
-export default function Tarjeta({ negocio, esFavorito, onToggleFav }) {
-  const [modalOpen, setModalOpen] = useState(false);
+export default function Tarjeta({ negocio, esFavorito, onToggleFav, onClick }) {
   const fallback = "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500";
+  const imagenPortada = negocio.imagen || negocio.img || fallback;
 
-  const linkMaps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${negocio.nombre}, ${negocio.ubicacion}`)}`;
-  const linkWhatsApp = `https://wa.me/${negocio.telefono}`;
-  const linkLlamar = `tel:${negocio.telefono}`;
+  // Enlaces de contacto
+  
+const linkLlamar = `tel:${negocio.telefono || ''}`;
+const linkWhatsApp = `https://wa.me/${negocio.telefono || ''}`;
+  // Enlace de Google Maps usando la ubicación de Firebase
+  const linkMaps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${negocio.nombre}, ${negocio.ubicacion || 'Parral'}`)}`;
 
   return (
-    <>
-      <div className="bg-[#1A1A1A] rounded-[2rem] overflow-hidden border border-white/5 shadow-2xl group transition-all duration-300 hover:border-[#8B5CF6]/30">
-        
-        {/* IMAGEN CON DEGRADADO */}
-        <div className="relative h-60 overflow-hidden">
-          <img 
-            src={negocio.img || fallback} 
-            className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all duration-500" 
-            onError={(e)=>e.target.src=fallback}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-transparent to-transparent opacity-90 z-10" />
+    <div 
+      onClick={onClick}
+      className="bg-[#1A1A1A] rounded-[2.5rem] overflow-hidden border border-white/5 shadow-2xl group transition-all duration-500 hover:border-[#8B5CF6]/40 cursor-pointer flex flex-col h-full"
+    >
+      
+      {/* SECCIÓN IMAGEN */}
+      <div className="relative h-60 overflow-hidden shrink-0">
+        <img 
+          src={imagenPortada} 
+          className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" 
+          onError={(e) => e.target.src = fallback}
+          alt={negocio.nombre}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-transparent to-transparent opacity-90" />
 
-          {/* ESTRELLA */}
-          <button 
-            onClick={()=>onToggleFav(negocio.id)} 
-            className={`absolute top-4 right-4 w-10 h-10 aspect-square rounded-full border backdrop-blur-md flex items-center justify-center transition-all z-20 ${
-              esFavorito ? 'bg-[#8B5CF6] border-[#8B5CF6] text-white' : 'bg-black/40 border-white/10 text-white/50'
-            }`}
-          >
-            <span className="leading-none text-sm">{esFavorito ? '⭐' : '☆'}</span>
-          </button>
-
-          {negocio.promo && (
-            <div className="absolute top-4 left-4 bg-[#8B5CF6] px-3 py-1.5 rounded-full text-[8px] font-black uppercase tracking-widest animate-pulse z-20">
-              Promo Activa
-            </div>
-          )}
-        </div>
-
-        {/* CUERPO DE LA TARJETA */}
-        <div className="p-6">
-          <span className="text-[#8B5CF6] text-[9px] font-black uppercase tracking-[0.2em]">
-            {negocio.categoria}
-          </span>
-          
-          <h3 className="text-2xl font-black italic uppercase text-white mt-1 mb-4 leading-tight">
-            {negocio.nombre}
-          </h3>
-
-          {/* 1. UBICACIÓN (Sola para que no se pierda el texto) */}
-          <a href={linkMaps} target="_blank" rel="noopener noreferrer" 
-             className="flex items-center gap-2 text-gray-400 hover:text-[#8B5CF6] transition-colors w-full mb-6 group/loc">
-            <div className="bg-[#8B5CF6]/10 p-1.5 rounded-lg border border-[#8B5CF6]/20 flex-shrink-0">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5 text-[#8B5CF6]">
-                <path fillRule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.847 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clipRule="evenodd" />
-              </svg>
-            </div>
-            <span className="text-[10px] font-bold uppercase tracking-tight truncate">
-              {negocio.ubicacion}
-            </span>
-          </a>
-
-          {/* 2. FILA DE ACCIONES (Menú + Contacto rápido) */}
-          <div className="flex gap-2">
-            {/* BOTÓN PRINCIPAL */}
-            <button 
-              onClick={()=>setModalOpen(true)} 
-              className="flex-1 py-4 bg-white/5 hover:bg-[#8B5CF6] border border-white/10 hover:border-[#8B5CF6] rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all"
-            >
-              Ver Menú
-            </button>
-
-            {/* BOTÓN WHATSAPP RAPIDO */}
-            <a href={linkWhatsApp} target="_blank" rel="noopener noreferrer" 
-               className="w-14 h-14 bg-[#25D366]/10 hover:bg-[#25D366] text-[#25D366] hover:text-white border border-[#25D366]/20 rounded-xl flex items-center justify-center transition-all">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.025 3.284l-.582 2.125 2.185-.573c.945.514 1.956.919 3.141.919 3.181 0 5.765-2.587 5.765-5.768 0-3.181-2.585-5.763-5.766-5.763zm3.845 8.165c-.149.42-.859.768-1.203.821-.296.046-.66.071-1.074-.061-.253-.082-.572-.196-.976-.371-1.721-.747-2.834-2.483-2.92-2.597-.086-.114-.693-.923-.693-1.763 0-.839.442-1.253.599-1.42.158-.168.345-.21.46-.21.115 0 .23 0 .33.007.106.005.249-.04.389.297.145.351.495 1.204.538 1.291.043.087.072.188.014.303-.058.114-.087.188-.173.289-.086.1-.182.223-.26.297-.098.094-.199.197-.085.393.114.196.506.835 1.085 1.35.748.665 1.378.872 1.574.969.196.096.313.08.43.052.118-.028.484-.188.552-.37.067-.181.067-.339.047-.37-.02-.032-.072-.051-.153-.092-.08-.041-.484-.239-.559-.266-.075-.027-.129-.041-.184.041-.054.081-.21.266-.257.32-.047.054-.094.061-.175.02-.08-.041-.34-.125-.648-.399-.239-.214-.401-.478-.448-.561-.047-.083-.005-.128.037-.168.037-.037.081-.095.122-.142.04-.047.054-.081.081-.135.027-.054.014-.101-.007-.142-.021-.04-.184-.442-.252-.607-.067-.16-.14-.139-.191-.141h-.163c-.167 0-.439.063-.67.31-.23.247-.88.859-.88 2.094s.9 2.435 1.024 2.6c.125.165 1.77 2.703 4.288 3.79 2.115.912 2.544.73 3.003.687.459-.044 1.481-.605 1.685-1.189z"/>
-              </svg>
-            </a>
-
-            {/* BOTÓN LLAMAR RAPIDO */}
-            <a href={linkLlamar} 
-               className="w-14 h-14 bg-[#8B5CF6]/10 hover:bg-[#8B5CF6] text-[#8B5CF6] hover:text-white border border-[#8B5CF6]/20 rounded-xl flex items-center justify-center transition-all">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                <path fillRule="evenodd" d="M1.5 4.5a3 3 0 0 1 3-3h1.372c.86 0 1.61.586 1.819 1.42l.515 2.061a1.91 1.91 0 0 1-.54 1.811l-1.17 1.17a18.845 18.845 0 0 0 7.437 7.437l1.17-1.17a1.91 1.91 0 0 1 1.811-.54l2.061.515c.834.209 1.42.959 1.42 1.819V19.5a3 3 0 0 1-3 3h-2.25a16.5 16.5 0 0 1-16.5-16.5V4.5Z" clipRule="evenodd" />
-              </svg>
-            </a>
+        {/* Badge de Promo */}
+        {negocio.promo && (
+          <div className="absolute top-6 left-6 bg-[#8B5CF6] px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-[0.2em] shadow-lg animate-pulse z-20">
+            🔥 Promo Activa
           </div>
-        </div>
+        )}
+
+        {/* Botón Favorito */}
+        <button 
+          onClick={(e) => {
+            e.stopPropagation(); 
+            onToggleFav(negocio.id);
+          }} 
+          className={`absolute top-6 right-6 w-12 h-12 rounded-full border backdrop-blur-md flex items-center justify-center transition-all z-20 shadow-xl ${
+            esFavorito ? 'bg-[#8B5CF6] border-[#8B5CF6] text-white' : 'bg-black/40 border-white/10 text-white/50 hover:border-white/30'
+          }`}
+        >
+          <span className="text-lg">{esFavorito ? '⭐' : '☆'}</span>
+        </button>
       </div>
 
-      <ModalMenu negocio={negocio} isOpen={modalOpen} onClose={()=>setModalOpen(false)} />
-    </>
+      {/* CUERPO DE LA TARJETA */}
+      <div className="p-8 flex flex-col flex-1">
+        <div className="flex items-center gap-2 mb-2">
+           <div className="h-[2px] w-4 bg-[#8B5CF6]"></div>
+           <span className="text-[#8B5CF6] text-[10px] font-black uppercase tracking-[0.3em]">
+             {negocio.categoria}
+           </span>
+        </div>
+        
+        <h3 className="text-3xl font-black italic uppercase text-white mb-5 leading-none tracking-tighter">
+          {negocio.nombre}
+        </h3>
+
+        {/* BOTÓN DE UBICACIÓN DARK MORADO (Restaurado con icono pequeño) */}
+        <a 
+          href={linkMaps}
+          target="_blank" 
+          rel="noopener noreferrer" 
+          onClick={(e) => e.stopPropagation()} 
+          className="flex items-center gap-3.5 bg-[#2A2A2A]/40 hover:bg-[#8B5CF6]/10 p-3.5 rounded-2xl border border-white/5 hover:border-[#8B5CF6]/30 transition-all mb-6 group"
+        >
+          {/* PEQUEÑO BOTÓN OSCURO CON ICONO */}
+          <div className="w-9 h-9 bg-[#121212] rounded-xl border border-white/10 flex items-center justify-center shrink-0 group-hover:bg-[#8B5CF6] transition-colors shadow-inner">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-[#8B5CF6] group-hover:text-white transition-colors">
+              <path fillRule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.847 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clipRule="evenodd" />
+            </svg>
+          </div>
+          
+          <div className="flex-1 min-w-0">
+            <p className="text-[10px] font-bold text-gray-300 uppercase tracking-tight truncate group-hover:text-white transition-colors">
+              {negocio.ubicacion || "Ubicación en el mapa"}
+            </p>
+          </div>
+        </a>
+
+        {/* BOTONES DE ACCIÓN */}
+        <div className="flex gap-2.5 mt-auto">
+          <button 
+            className="flex-[2] py-4 bg-white/5 hover:bg-[#8B5CF6] border border-white/10 hover:border-[#8B5CF6] rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all text-white shadow-lg"
+          >
+            Ver Menú
+          </button>
+
+          <a 
+            href={linkLlamar}
+            onClick={(e) => e.stopPropagation()}
+            className="w-14 h-14 bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-2xl flex items-center justify-center transition-all shadow-lg"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+              <path fillRule="evenodd" d="M1.5 4.5a3 3 0 0 1 3-3h1.372c.86 0 1.61.586 1.819 1.42l.515 2.061a1.91 1.91 0 0 1-.54 1.811l-1.17 1.17a18.845 18.845 0 0 0 7.437 7.437l1.17-1.17a1.91 1.91 0 0 1 1.811-.54l2.061.515c.834.209 1.42.959 1.42 1.819V19.5a3 3 0 0 1-3 3h-2.25a16.5 16.5 0 0 1-16.5-16.5V4.5Z" clipRule="evenodd" />
+            </svg>
+          </a>
+
+          <a 
+            href={linkWhatsApp} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            onClick={(e) => e.stopPropagation()}
+            className="w-14 h-14 bg-[#25D366]/10 hover:bg-[#25D366] text-[#25D366] hover:text-white border border-[#25D366]/20 rounded-2xl flex items-center justify-center transition-all shadow-lg"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.417-.003 6.557-5.338 11.892-11.893 11.892-1.997-.001-3.951-.5-5.688-1.448l-6.305 1.652zm6.599-3.835c1.52.909 3.4 1.388 5.431 1.389 5.4 0 9.791-4.391 9.793-9.793.001-2.618-1.018-5.078-2.871-6.931-1.854-1.853-4.314-2.87-6.932-2.87-5.402 0-9.792 4.39-9.795 9.792-.001 2.103.547 4.154 1.588 5.95l-.127.466-.632 2.303 2.357-.618.441-.129-.453.251z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
   );
 }
