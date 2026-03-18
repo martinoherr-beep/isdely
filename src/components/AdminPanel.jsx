@@ -8,9 +8,10 @@ export default function AdminPanel() {
   const [nuevoNegocio, setNuevoNegocio] = useState({
     nombre: '', categoria: 'RESTAURANTE', promo: '', imagen: '', telefono: '', ubicacion: '', productos: [] 
   });
-  const [tempProducto, setTempProducto] = useState({ nombre: '', precio: '', imagen: '' });
+  
+  // Añadimos categoriaInterna al estado temporal del producto
+  const [tempProducto, setTempProducto] = useState({ nombre: '', precio: '', imagen: '', categoriaInterna: '' });
 
-  // Forzar scroll al inicio al cargar
   useEffect(() => {
     window.scrollTo(0, 0);
     const unsub = onSnapshot(collection(db, "locales"), (snap) => {
@@ -27,11 +28,17 @@ export default function AdminPanel() {
 
   const agregarProductoLista = () => {
     if (!tempProducto.nombre || !tempProducto.precio) return alert("Nombre y precio obligatorios");
+    
+    // Si no pone categoría, le asignamos 'GENERAL' por defecto
+    const categoriaFinal = tempProducto.categoriaInterna.trim() || 'GENERAL';
+
     setNuevoNegocio({
       ...nuevoNegocio,
-      productos: [...(nuevoNegocio.productos || []), { ...tempProducto }]
+      productos: [...(nuevoNegocio.productos || []), { ...tempProducto, categoriaInterna: categoriaFinal.toUpperCase() }]
     });
-    setTempProducto({ nombre: '', precio: '', imagen: '' });
+    
+    // Limpiamos los campos para el siguiente producto
+    setTempProducto({ nombre: '', precio: '', imagen: '', categoriaInterna: '' });
   };
 
   const eliminarLocal = async (id) => {
@@ -67,19 +74,20 @@ export default function AdminPanel() {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-8">
-          {/* FILA 1: NOMBRE Y CATEGORÍA */}
+          {/* FILA 1: NOMBRE Y CATEGORÍA DEL LOCAL */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="text-[9px] font-black uppercase tracking-[0.3em] text-gray-500 ml-2 mb-2 block">Nombre</label>
+              <label className="text-[9px] font-black uppercase tracking-[0.3em] text-gray-500 ml-2 mb-2 block">Nombre del Local</label>
               <input type="text" className="w-full bg-[#121212] border border-white/5 p-4 rounded-2xl focus:border-[#8B5CF6] outline-none text-sm text-white transition-all" value={nuevoNegocio.nombre} onChange={(e) => setNuevoNegocio({...nuevoNegocio, nombre: e.target.value})} placeholder="Ej: Tacos Isdely" required />
             </div>
             <div>
-              <label className="text-[9px] font-black uppercase tracking-[0.3em] text-gray-500 ml-2 mb-2 block">Categoría</label>
+              <label className="text-[9px] font-black uppercase tracking-[0.3em] text-gray-500 ml-2 mb-2 block">Categoría del Local</label>
               <select className="w-full bg-[#121212] border border-white/5 p-4 rounded-2xl focus:border-[#8B5CF6] outline-none text-sm text-gray-400 appearance-none transition-all" value={nuevoNegocio.categoria} onChange={(e) => setNuevoNegocio({...nuevoNegocio, categoria: e.target.value})}>
                 <option value="RESTAURANTE">RESTAURANTE</option>
                 <option value="PARRILLA">PARRILLA</option>
                 <option value="MARISCO">MARISCO</option>
                 <option value="BAR">BAR</option>
+                <option value="POSTRES">POSTRES</option>
               </select>
             </div>
           </div>
@@ -104,19 +112,22 @@ export default function AdminPanel() {
             </div>
             <div>
               <label className="text-[9px] font-black uppercase tracking-[0.3em] text-gray-500 ml-2 mb-2 block">URL Portada</label>
-              <input type="text" className="w-full bg-[#121212] border border-white/5 p-4 rounded-2xl focus:border-[#8B5CF6] outline-none text-sm text-white transition-all" value={nuevoNegocio.imagen} onChange={(e) => setTempProducto({...nuevoNegocio, imagen: e.target.value})} placeholder="https://..." />
+              <input type="text" className="w-full bg-[#121212] border border-white/5 p-4 rounded-2xl focus:border-[#8B5CF6] outline-none text-sm text-white transition-all" value={nuevoNegocio.imagen} onChange={(e) => setNuevoNegocio({...nuevoNegocio, imagen: e.target.value})} placeholder="https://..." />
             </div>
           </div>
 
-          {/* SECCIÓN PRODUCTOS: DISEÑO MEJORADO CON BOTÓN ABAJO */}
+          {/* SECCIÓN ARMADO DE MENÚ: CON CATEGORÍA DE PRODUCTO */}
           <div className="bg-black/20 p-8 rounded-[2rem] border border-white/5 shadow-inner">
-            <h3 className="text-[10px] font-black uppercase tracking-[0.3em] mb-6 text-[#8B5CF6]">Menú del Local</h3>
+            <h3 className="text-[10px] font-black uppercase tracking-[0.3em] mb-6 text-[#8B5CF6]">Armado del Menú</h3>
             
             <div className="flex flex-col gap-6">
-              {/* FILA DE INPUTS */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div>
-                  <label className="text-[7px] font-black uppercase tracking-[0.2em] text-gray-600 mb-1 block ml-1">Producto</label>
+                  <label className="text-[7px] font-black uppercase tracking-[0.2em] text-gray-600 mb-1 block ml-1">Sección (Ej: Bebidas)</label>
+                  <input type="text" placeholder="HAMBURGUESAS" className="w-full bg-[#121212] border border-white/5 p-3 rounded-xl text-xs text-white focus:border-[#8B5CF6] outline-none" value={tempProducto.categoriaInterna} onChange={(e) => setTempProducto({...tempProducto, categoriaInterna: e.target.value})} />
+                </div>
+                <div>
+                  <label className="text-[7px] font-black uppercase tracking-[0.2em] text-gray-600 mb-1 block ml-1">Nombre Platillo</label>
                   <input type="text" placeholder="Ej: Taco" className="w-full bg-[#121212] border border-white/5 p-3 rounded-xl text-xs text-white focus:border-[#8B5CF6] outline-none" value={tempProducto.nombre} onChange={(e) => setTempProducto({...tempProducto, nombre: e.target.value})} />
                 </div>
                 <div>
@@ -129,11 +140,10 @@ export default function AdminPanel() {
                 </div>
               </div>
 
-              {/* BOTÓN AÑADIR (Abarca todo el ancho) */}
               <button 
                 type="button" 
                 onClick={agregarProductoLista} 
-                className="w-full bg-[#8B5CF6]/10 hover:bg-[#8B5CF6] text-[#8B5CF6] hover:text-white border border-[#8B5CF6]/20 py-4 rounded-xl font-black text-[10px] uppercase transition-all active:scale-[0.98] shadow-lg shadow-purple-500/5"
+                className="w-full bg-[#8B5CF6]/10 hover:bg-[#8B5CF6] text-[#8B5CF6] hover:text-white border border-[#8B5CF6]/20 py-4 rounded-xl font-black text-[10px] uppercase transition-all active:scale-[0.98]"
               >
                 + Agregar al Menú
               </button>
@@ -144,16 +154,15 @@ export default function AdminPanel() {
               {nuevoNegocio.productos?.map((p, i) => (
                 <div key={i} className="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/5 group">
                   <div className="flex items-center gap-3">
-                    {p.imagen && <img src={p.imagen} alt="" className="w-8 h-8 rounded-lg object-cover border border-white/10" />}
+                    <span className="text-[7px] bg-[#8B5CF6]/20 text-[#8B5CF6] px-2 py-1 rounded-md font-black">{p.categoriaInterna || 'GENERAL'}</span>
                     <span className="text-[10px] font-bold text-white uppercase tracking-tight">{p.nombre} - <span className="text-[#8B5CF6]">${p.precio}</span></span>
                   </div>
-                  <button type="button" onClick={() => setNuevoNegocio({...nuevoNegocio, productos: nuevoNegocio.productos.filter((_, idx) => idx !== i)})} className="text-red-500 text-xs font-bold opacity-30 group-hover:opacity-100 px-2 transition-opacity">✕</button>
+                  <button type="button" onClick={() => setNuevoNegocio({...nuevoNegocio, productos: nuevoNegocio.productos.filter((_, idx) => idx !== i)})} className="text-red-500 px-2">✕</button>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* BOTÓN PUBLICAR FINAL */}
           <button type="submit" className="w-full bg-[#8B5CF6] hover:bg-[#7C3AED] py-6 rounded-3xl font-black uppercase tracking-[0.2em] text-[11px] text-white shadow-2xl transition-all active:scale-[0.98]">
             {editandoId ? 'GUARDAR CAMBIOS' : 'PUBLICAR LOCAL Y MENÚ'}
           </button>
@@ -164,7 +173,7 @@ export default function AdminPanel() {
         </form>
       </div>
 
-      {/* GESTIÓN DE NEGOCIOS (LISTA DE ABAJO) */}
+      {/* GESTIÓN DE NEGOCIOS */}
       <div className="bg-[#1A1A1A]/60 p-10 rounded-[2.5rem] border border-white/5 shadow-2xl">
         <h3 className="text-[10px] font-black uppercase tracking-[0.5em] text-gray-500 mb-8 text-center">Gestión de Negocios</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

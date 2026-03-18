@@ -191,16 +191,29 @@ function App() {
         />
       )}
 
-      {/* FOOTER ORIGINAL RESPANDO */}
+      {/* FOOTER: SIEMPRE VISIBLE */}
       <footer className="max-w-6xl mx-auto w-full mt-20 pt-10 border-t border-white/5 text-center">
-        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500 mb-2">Hecho con ❤️ by Creators</p>
-        <p className="text-[8px] font-black  tracking-[0.4em] text-gray-500 mb-1">Derechos Reservados 2026</p>
-        <button 
-          onClick={() => setModoAdmin(!modoAdmin)} 
-          className="mt-4 bg-[#8B5CF6] text-white text-[10px] font-black px-6 py-2 rounded-full hover:scale-110 transition-all shadow-lg"
-        >
-          {modoAdmin ? 'CERRAR PANEL' : 'ABRIR PANEL DE ADMIN'}
-        </button>
+        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500 mb-2">
+          Hecho con ❤️ by Creators
+        </p>
+        <p className="text-[8px] font-black tracking-[0.4em] text-gray-500 mb-1">
+          Derechos Reservados 2026
+        </p>
+
+        {/* BOTÓN ADMIN: SOLO VISIBLE CON LA LLAVE ?admin=isdely2026 */}
+        {window.location.search.includes('admin=isdely2026') && (
+          <div className="mt-6 animate-in fade-in zoom-in duration-500">
+            <p className="text-[8px] font-bold text-[#8B5CF6] uppercase tracking-[0.2em] mb-2 opacity-60">
+              Modo Administrador
+            </p>
+            <button 
+              onClick={() => setModoAdmin(!modoAdmin)} 
+              className="bg-[#8B5CF6] text-white text-[10px] font-black px-8 py-3 rounded-full hover:scale-110 transition-all shadow-lg shadow-purple-500/20"
+            >
+              {modoAdmin ? 'CERRAR PANEL' : 'ABRIR PANEL DE ADMIN'}
+            </button>
+          </div>
+        )}
       </footer>
     </div>
   );
