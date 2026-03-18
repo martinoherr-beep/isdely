@@ -10,17 +10,14 @@ export default function AdminPanel() {
   });
   const [tempProducto, setTempProducto] = useState({ nombre: '', precio: '', imagen: '' });
 
-  // Cargar locales para la lista de edición
+  // Forzar scroll al inicio al cargar
   useEffect(() => {
+    window.scrollTo(0, 0);
     const unsub = onSnapshot(collection(db, "locales"), (snap) => {
       setLocales(snap.docs.map(d => ({ id: d.id, ...d.data() })));
     });
     return () => unsub();
   }, []);
-  // Al entrar al componente, forzamos el scroll al inicio (arriba)
-useEffect(() => {
-  window.scrollTo(0, 0);
-}, []); // Los corchetes vacíos [] significan "solo al cargar"
 
   const seleccionarParaEditar = (loc) => {
     setEditandoId(loc.id);
@@ -61,9 +58,9 @@ useEffect(() => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-12 mb-24">
+    <div className="max-w-4xl mx-auto space-y-12 mb-24 animate-in fade-in duration-500">
       
-      {/* SECCIÓN 1: FORMULARIO DE CARGA/EDICIÓN */}
+      {/* FORMULARIO DE CARGA/EDICIÓN */}
       <div className="bg-[#1A1A1A] p-10 rounded-[2.5rem] border border-white/5 shadow-2xl">
         <h2 className="text-3xl font-black italic uppercase text-center mb-10 tracking-tighter">
           {editandoId ? 'EDITANDO' : 'PANEL'} <span className="text-[#8B5CF6]">ISDELY</span>
@@ -74,42 +71,28 @@ useEffect(() => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="text-[9px] font-black uppercase tracking-[0.3em] text-gray-500 ml-2 mb-2 block">Nombre</label>
-              <input type="text" className="w-full bg-[#121212] border border-white/5 p-4 rounded-2xl focus:border-[#8B5CF6] outline-none text-sm text-white" value={nuevoNegocio.nombre} onChange={(e) => setNuevoNegocio({...nuevoNegocio, nombre: e.target.value})} placeholder="Ej: Tacos Isdely" required />
+              <input type="text" className="w-full bg-[#121212] border border-white/5 p-4 rounded-2xl focus:border-[#8B5CF6] outline-none text-sm text-white transition-all" value={nuevoNegocio.nombre} onChange={(e) => setNuevoNegocio({...nuevoNegocio, nombre: e.target.value})} placeholder="Ej: Tacos Isdely" required />
             </div>
             <div>
               <label className="text-[9px] font-black uppercase tracking-[0.3em] text-gray-500 ml-2 mb-2 block">Categoría</label>
-           {/* CATEGORÍA EN ADMIN PANEL */}
-<select 
-  className="w-full bg-[#121212] border border-white/5 p-4 rounded-2xl focus:border-[#8B5CF6] outline-none text-sm text-gray-400 appearance-none transition-all"
-  value={nuevoNegocio.categoria}
-  onChange={(e) => setNuevoNegocio({...nuevoNegocio, categoria: e.target.value})}
->
-  <option value="RESTAURANTE">RESTAURANTE</option>
-  <option value="PARRILLA">PARRILLA</option>
- 
-  {/* AGREGA LAS NUEVAS AQUÍ */}
-  <option value="POSTRES">POSTRES</option>
-  <option value="CAFETERIA">CAFETERÍA</option>
-  <option value="TACOS">TACOS</option>
-  <option value="HAMBURGUESAS">HAMBURGUESAS</option>
-  <option value="HOT DOGS">HOT DOGS</option>
-  <option value="BOLAS DE ARROZ">BOLAS DE ARROZ</option>
-  <option value="GORDITAS">GORDITAS</option>
-  <option value="BURRITOS">BURRITOS</option>
-  <option value="TORTAS">TORTAS</option>
-</select>
+              <select className="w-full bg-[#121212] border border-white/5 p-4 rounded-2xl focus:border-[#8B5CF6] outline-none text-sm text-gray-400 appearance-none transition-all" value={nuevoNegocio.categoria} onChange={(e) => setNuevoNegocio({...nuevoNegocio, categoria: e.target.value})}>
+                <option value="RESTAURANTE">RESTAURANTE</option>
+                <option value="PARRILLA">PARRILLA</option>
+                <option value="MARISCO">MARISCO</option>
+                <option value="BAR">BAR</option>
+              </select>
             </div>
           </div>
 
           {/* FILA 2: TELÉFONO Y UBICACIÓN */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="text-[9px] font-black uppercase tracking-[0.3em] text-gray-500 ml-2 mb-2 block">Teléfono</label>
-              <input type="text" className="w-full bg-[#121212] border border-white/5 p-4 rounded-2xl focus:border-[#8B5CF6] outline-none text-sm text-white" value={nuevoNegocio.telefono} onChange={(e) => setNuevoNegocio({...nuevoNegocio, telefono: e.target.value})} placeholder="627..." required />
+              <label className="text-[9px] font-black uppercase tracking-[0.3em] text-gray-500 ml-2 mb-2 block">Teléfono (WhatsApp)</label>
+              <input type="text" className="w-full bg-[#121212] border border-white/5 p-4 rounded-2xl focus:border-[#8B5CF6] outline-none text-sm text-white transition-all" value={nuevoNegocio.telefono} onChange={(e) => setNuevoNegocio({...nuevoNegocio, telefono: e.target.value})} placeholder="627..." required />
             </div>
             <div>
-              <label className="text-[9px] font-black uppercase tracking-[0.3em] text-gray-500 ml-2 mb-2 block">Dirección</label>
-              <input type="text" className="w-full bg-[#121212] border border-white/5 p-4 rounded-2xl focus:border-[#8B5CF6] outline-none text-sm text-white" value={nuevoNegocio.ubicacion} onChange={(e) => setNuevoNegocio({...nuevoNegocio, ubicacion: e.target.value})} placeholder="Av. Independencia..." />
+              <label className="text-[9px] font-black uppercase tracking-[0.3em] text-gray-500 ml-2 mb-2 block">Dirección Física</label>
+              <input type="text" className="w-full bg-[#121212] border border-white/5 p-4 rounded-2xl focus:border-[#8B5CF6] outline-none text-sm text-white transition-all" value={nuevoNegocio.ubicacion} onChange={(e) => setNuevoNegocio({...nuevoNegocio, ubicacion: e.target.value})} placeholder="Av. Independencia..." />
             </div>
           </div>
 
@@ -117,40 +100,52 @@ useEffect(() => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="text-[9px] font-black uppercase tracking-[0.3em] text-gray-500 ml-2 mb-2 block">Promo Especial</label>
-              <input type="text" className="w-full bg-[#121212] border border-white/5 p-4 rounded-2xl focus:border-[#8B5CF6] outline-none text-sm text-white" value={nuevoNegocio.promo} onChange={(e) => setNuevoNegocio({...nuevoNegocio, promo: e.target.value})} placeholder="Ej: 2x1 Martes" />
+              <input type="text" className="w-full bg-[#121212] border border-white/5 p-4 rounded-2xl focus:border-[#8B5CF6] outline-none text-sm text-white transition-all" value={nuevoNegocio.promo} onChange={(e) => setNuevoNegocio({...nuevoNegocio, promo: e.target.value})} placeholder="Ej: 2x1 Martes" />
             </div>
             <div>
               <label className="text-[9px] font-black uppercase tracking-[0.3em] text-gray-500 ml-2 mb-2 block">URL Portada</label>
-              <input type="text" className="w-full bg-[#121212] border border-white/5 p-4 rounded-2xl focus:border-[#8B5CF6] outline-none text-sm text-white" value={nuevoNegocio.imagen} onChange={(e) => setNuevoNegocio({...nuevoNegocio, imagen: e.target.value})} placeholder="https://..." />
+              <input type="text" className="w-full bg-[#121212] border border-white/5 p-4 rounded-2xl focus:border-[#8B5CF6] outline-none text-sm text-white transition-all" value={nuevoNegocio.imagen} onChange={(e) => setTempProducto({...nuevoNegocio, imagen: e.target.value})} placeholder="https://..." />
             </div>
           </div>
 
-          {/* SECCIÓN PRODUCTOS CON IMAGEN */}
-          <div className="bg-black/20 p-8 rounded-[2rem] border border-white/5">
-            <h3 className="text-xs font-black uppercase tracking-[0.3em] mb-6 text-[#8B5CF6]">Menú / Productos</h3>
-            <div className="flex flex-wrap md:flex-nowrap gap-4 mb-6 items-end">
-              <div className="flex-[3] w-full md:w-auto">
-                <label className="text-[7px] font-black uppercase text-gray-600 ml-1 mb-1 block">Producto</label>
-                <input type="text" placeholder="Ej: Tortas" className="w-full bg-[#121212] border border-white/5 p-3 rounded-xl text-xs text-white" value={tempProducto.nombre} onChange={(e) => setTempProducto({...tempProducto, nombre: e.target.value})} />
+          {/* SECCIÓN PRODUCTOS: DISEÑO MEJORADO CON BOTÓN ABAJO */}
+          <div className="bg-black/20 p-8 rounded-[2rem] border border-white/5 shadow-inner">
+            <h3 className="text-[10px] font-black uppercase tracking-[0.3em] mb-6 text-[#8B5CF6]">Menú del Local</h3>
+            
+            <div className="flex flex-col gap-6">
+              {/* FILA DE INPUTS */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className="text-[7px] font-black uppercase tracking-[0.2em] text-gray-600 mb-1 block ml-1">Producto</label>
+                  <input type="text" placeholder="Ej: Taco" className="w-full bg-[#121212] border border-white/5 p-3 rounded-xl text-xs text-white focus:border-[#8B5CF6] outline-none" value={tempProducto.nombre} onChange={(e) => setTempProducto({...tempProducto, nombre: e.target.value})} />
+                </div>
+                <div>
+                  <label className="text-[7px] font-black uppercase tracking-[0.2em] text-gray-600 mb-1 block ml-1">Precio</label>
+                  <input type="number" placeholder="0" className="w-full bg-[#121212] border border-white/5 p-3 rounded-xl text-xs text-white focus:border-[#8B5CF6] outline-none" value={tempProducto.precio} onChange={(e) => setTempProducto({...tempProducto, precio: e.target.value})} />
+                </div>
+                <div>
+                  <label className="text-[7px] font-black uppercase tracking-[0.2em] text-gray-600 mb-1 block ml-1">URL Foto</label>
+                  <input type="text" placeholder="https://..." className="w-full bg-[#121212] border border-white/5 p-3 rounded-xl text-xs text-white focus:border-[#8B5CF6] outline-none" value={tempProducto.imagen} onChange={(e) => setTempProducto({...tempProducto, imagen: e.target.value})} />
+                </div>
               </div>
-              <div className="w-24">
-                <label className="text-[7px] font-black uppercase text-gray-600 ml-1 mb-1 block">Precio</label>
-                <input type="number" placeholder="45" className="w-full bg-[#121212] border border-white/5 p-3 rounded-xl text-xs text-white" value={tempProducto.precio} onChange={(e) => setTempProducto({...tempProducto, precio: e.target.value})} />
-              </div>
-              <div className="flex-[2] w-full md:w-auto">
-                <label className="text-[7px] font-black uppercase text-gray-600 ml-1 mb-1 block">URL Foto</label>
-                <input type="text" placeholder="https://..." className="w-full bg-[#121212] border border-white/5 p-3 rounded-xl text-xs text-white" value={tempProducto.imagen} onChange={(e) => setTempProducto({...tempProducto, imagen: e.target.value})} />
-              </div>
-              <button type="button" onClick={agregarProductoLista} className="bg-[#8B5CF6] text-white px-8 h-[42px] rounded-xl font-black text-[12px] uppercase transition-all shrink-0 active:scale-95">+</button>
+
+              {/* BOTÓN AÑADIR (Abarca todo el ancho) */}
+              <button 
+                type="button" 
+                onClick={agregarProductoLista} 
+                className="w-full bg-[#8B5CF6]/10 hover:bg-[#8B5CF6] text-[#8B5CF6] hover:text-white border border-[#8B5CF6]/20 py-4 rounded-xl font-black text-[10px] uppercase transition-all active:scale-[0.98] shadow-lg shadow-purple-500/5"
+              >
+                + Agregar al Menú
+              </button>
             </div>
 
-            {/* LISTA DE PRODUCTOS AGREGADOS */}
-            <div className="space-y-2 max-h-48 overflow-y-auto no-scrollbar pr-1">
+            {/* LISTA PREVIA DE PRODUCTOS */}
+            <div className="mt-8 space-y-2 max-h-48 overflow-y-auto no-scrollbar pr-1">
               {nuevoNegocio.productos?.map((p, i) => (
                 <div key={i} className="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/5 group">
                   <div className="flex items-center gap-3">
-                    {p.imagen && <img src={p.imagen} className="w-8 h-8 rounded-lg object-cover" />}
-                    <span className="text-[10px] font-bold text-white uppercase">{p.nombre} - <span className="text-[#8B5CF6]">${p.precio}</span></span>
+                    {p.imagen && <img src={p.imagen} alt="" className="w-8 h-8 rounded-lg object-cover border border-white/10" />}
+                    <span className="text-[10px] font-bold text-white uppercase tracking-tight">{p.nombre} - <span className="text-[#8B5CF6]">${p.precio}</span></span>
                   </div>
                   <button type="button" onClick={() => setNuevoNegocio({...nuevoNegocio, productos: nuevoNegocio.productos.filter((_, idx) => idx !== i)})} className="text-red-500 text-xs font-bold opacity-30 group-hover:opacity-100 px-2 transition-opacity">✕</button>
                 </div>
@@ -158,6 +153,7 @@ useEffect(() => {
             </div>
           </div>
 
+          {/* BOTÓN PUBLICAR FINAL */}
           <button type="submit" className="w-full bg-[#8B5CF6] hover:bg-[#7C3AED] py-6 rounded-3xl font-black uppercase tracking-[0.2em] text-[11px] text-white shadow-2xl transition-all active:scale-[0.98]">
             {editandoId ? 'GUARDAR CAMBIOS' : 'PUBLICAR LOCAL Y MENÚ'}
           </button>
@@ -168,7 +164,7 @@ useEffect(() => {
         </form>
       </div>
 
-      {/* SECCIÓN 2: LISTA DE GESTIÓN (Abajo del todo) */}
+      {/* GESTIÓN DE NEGOCIOS (LISTA DE ABAJO) */}
       <div className="bg-[#1A1A1A]/60 p-10 rounded-[2.5rem] border border-white/5 shadow-2xl">
         <h3 className="text-[10px] font-black uppercase tracking-[0.5em] text-gray-500 mb-8 text-center">Gestión de Negocios</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
