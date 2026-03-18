@@ -24,7 +24,7 @@ function App() {
   // ESTADO PARA EL LOGIN VISUAL PROTEGIDO
   const [mostrarLogin, setMostrarLogin] = useState(false);
   const [pinIngresado, setPinIngresado] = useState('');
-  const PIN_MAESTRO = "2026"; // <--- CAMBIA TU PIN AQUÍ
+  const PIN_MAESTRO = "Cr34tors*"; // <--- CAMBIA TU PIN AQUÍ
 
   // CONEXIÓN EN TIEMPO REAL CON FIREBASE
   useEffect(() => {
