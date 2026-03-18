@@ -17,6 +17,10 @@ export default function AdminPanel() {
     });
     return () => unsub();
   }, []);
+  // Al entrar al componente, forzamos el scroll al inicio (arriba)
+useEffect(() => {
+  window.scrollTo(0, 0);
+}, []); // Los corchetes vacíos [] significan "solo al cargar"
 
   const seleccionarParaEditar = (loc) => {
     setEditandoId(loc.id);
@@ -74,12 +78,26 @@ export default function AdminPanel() {
             </div>
             <div>
               <label className="text-[9px] font-black uppercase tracking-[0.3em] text-gray-500 ml-2 mb-2 block">Categoría</label>
-              <select className="w-full bg-[#121212] border border-white/5 p-4 rounded-2xl focus:border-[#8B5CF6] outline-none text-sm text-gray-400 appearance-none" value={nuevoNegocio.categoria} onChange={(e) => setNuevoNegocio({...nuevoNegocio, categoria: e.target.value})}>
-                <option value="RESTAURANTE">RESTAURANTE</option>
-                <option value="PARRILLA">PARRILLA</option>
-                <option value="MARISCO">MARISCO</option>
-                <option value="BAR">BAR</option>
-              </select>
+           {/* CATEGORÍA EN ADMIN PANEL */}
+<select 
+  className="w-full bg-[#121212] border border-white/5 p-4 rounded-2xl focus:border-[#8B5CF6] outline-none text-sm text-gray-400 appearance-none transition-all"
+  value={nuevoNegocio.categoria}
+  onChange={(e) => setNuevoNegocio({...nuevoNegocio, categoria: e.target.value})}
+>
+  <option value="RESTAURANTE">RESTAURANTE</option>
+  <option value="PARRILLA">PARRILLA</option>
+ 
+  {/* AGREGA LAS NUEVAS AQUÍ */}
+  <option value="POSTRES">POSTRES</option>
+  <option value="CAFETERIA">CAFETERÍA</option>
+  <option value="TACOS">TACOS</option>
+  <option value="HAMBURGUESAS">HAMBURGUESAS</option>
+  <option value="HOT DOGS">HOT DOGS</option>
+  <option value="BOLAS DE ARROZ">BOLAS DE ARROZ</option>
+  <option value="GORDITAS">GORDITAS</option>
+  <option value="BURRITOS">BURRITOS</option>
+  <option value="TORTAS">TORTAS</option>
+</select>
             </div>
           </div>
 

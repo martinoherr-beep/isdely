@@ -57,7 +57,9 @@ function App() {
     return coincideBusca && coincideFiltro && coincideFav;
   });
 
-  const categorias = ['TODO', 'RESTAURANTE', 'PARRILLA', 'MARISCO', 'BAR'];
+  // CATEGORÍAS DINÁMICAS: Ahora lee de Firebase pero respeta tu estilo
+  const categoriasExtraidas = [...new Set(locales.map(l => l.categoria))].filter(Boolean);
+  const listaCategorias = ['TODO', ...categoriasExtraidas];
 
   if (showSplash) {
     return <Splash onFinish={() => setShowSplash(false)} />;
@@ -80,7 +82,7 @@ function App() {
       ) : (
         /* 2. MODO USUARIO */
         <>
-          {/* TU BANNER DE PROMO ORIGINAL - VERSIÓN ANTISCROLL RE-INTEGRADA */}
+          {/* TU BANNER DE PROMO ORIGINAL */}
           {locales.some(l => l.promo) && (
             <div 
               className="-mx-6 -mt-6 mb-10 bg-[#8B5CF6]/30 backdrop-blur-xl py-3 border-b border-white/10 z-50 sticky top-0 overflow-hidden"
@@ -141,10 +143,10 @@ function App() {
               </button>
             </div>
 
-            {/* CATEGORÍAS */}
+            {/* CATEGORÍAS DINÁMICAS CON TU DISEÑO ORIGINAL */}
             <div className="w-full max-w-2xl overflow-x-auto pb-2 no-scrollbar">
               <div className="flex justify-start md:justify-center gap-2.5 min-w-max px-4">
-                {categorias.map(cat => (
+                {listaCategorias.map(cat => (
                   <button
                     key={cat}
                     onClick={() => { setFiltro(cat); setVerFavoritos(false); }}
@@ -189,12 +191,13 @@ function App() {
         />
       )}
 
-      {/* FOOTER */}
+      {/* FOOTER ORIGINAL RESPANDO */}
       <footer className="max-w-6xl mx-auto w-full mt-20 pt-10 border-t border-white/5 text-center">
         <p className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500 mb-2">Hecho con ❤️ by Creators</p>
+        <p className="text-[8px] font-black  tracking-[0.4em] text-gray-500 mb-1">Derechos Reservados 2026</p>
         <button 
           onClick={() => setModoAdmin(!modoAdmin)} 
-          className="mt-4 bg-[#8B5CF6] text-white text-[10px] font-black px-6 py-2 rounded-full hover:scale-110 transition-all"
+          className="mt-4 bg-[#8B5CF6] text-white text-[10px] font-black px-6 py-2 rounded-full hover:scale-110 transition-all shadow-lg"
         >
           {modoAdmin ? 'CERRAR PANEL' : 'ABRIR PANEL DE ADMIN'}
         </button>

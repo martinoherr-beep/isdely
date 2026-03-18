@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 
 const MenuModal = ({ negocio, onClose }) => {
-  const [nombreCliente, setNombreCliente] = useState("Martin");
+  const [nombreCliente, setNombreCliente] = useState(() => {
+  // Intenta leer el nombre guardado previamente
+  return localStorage.getItem('isdely_user_name') || "";
+});
   const [metodoEntrega, setMetodoEntrega] = useState("DOMICILIO");
   const [carrito, setCarrito] = useState({});
 
@@ -59,11 +62,18 @@ const MenuModal = ({ negocio, onClose }) => {
 
         {/* DATOS CLIENTE */}
         <div className="px-8 py-6 grid grid-cols-2 gap-4 bg-white/[0.02] border-y border-white/5">
-          <input 
-            type="text" value={nombreCliente} onChange={(e) => setNombreCliente(e.target.value)}
-            className="bg-[#1A1A1A] border border-white/10 rounded-2xl p-4 text-sm text-white outline-none focus:border-[#8B5CF6]"
-            placeholder="Tu nombre"
-          />
+<input 
+  type="text" 
+  value={nombreCliente} 
+  onChange={(e) => {
+    const nuevoNombre = e.target.value;
+    setNombreCliente(nuevoNombre);
+    // Guardamos en la memoria del navegador
+    localStorage.setItem('isdely_user_name', nuevoNombre);
+  }}
+  placeholder="Escribe tu nombre..."
+  className="bg-[#1A1A1A] border border-white/5 rounded-2xl p-4 text-sm text-white outline-none focus:border-[#8B5CF6] placeholder:text-gray-600"
+/>
           <div className="flex bg-[#1A1A1A] rounded-2xl p-1 border border-white/10">
             {['DOMICILIO', 'RECOGER'].map(m => (
               <button key={m} onClick={() => setMetodoEntrega(m)} className={`flex-1 text-[9px] font-black py-3 rounded-xl transition-all ${metodoEntrega === m ? 'bg-[#8B5CF6] text-white shadow-lg' : 'text-gray-500 hover:text-gray-300'}`}>{m}</button>
