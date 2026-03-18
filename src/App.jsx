@@ -206,7 +206,7 @@ function App() {
     <button 
       onClick={() => {
         const pin = prompt("Introduce el PIN de acceso:");
-        if (pin === "2026") { // <--- AQUÍ PONES TU CONTRASEÑA
+        if (pin === "Cr34tors26*") { // <--- AQUÍ PONES TU CONTRASEÑA
           setModoAdmin(true);
         } else {
           alert("PIN Incorrecto");
