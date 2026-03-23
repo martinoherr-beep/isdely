@@ -15,6 +15,7 @@ export default function AdminPanel() {
     telefono: '', 
     ubicacion: '', 
     descripcion: '', // <-- Nuevo campo
+    menuActivo: false, // <--- NUEVO: Controla si se muestra el botón de menú
     productos: [] 
   });
 
@@ -130,6 +131,27 @@ export default function AdminPanel() {
                 ))}
             </div>
           </div>
+
+        {/* --- INTERRUPTOR DE MENÚ --- */}
+<div className="flex items-center justify-between bg-[#8B5CF6]/5 p-6 rounded-3xl border border-[#8B5CF6]/20 mb-6">
+  <div>
+    <h4 className="text-white font-black text-[10px] uppercase tracking-widest">Estado del Menú</h4>
+    <p className="text-[9px] text-gray-500 uppercase font-bold">¿Activar carta de productos y pedidos?</p>
+  </div>
+  <button 
+    type="button"
+    onClick={() => setNuevoNegocio({...nuevoNegocio, menuActivo: !nuevoNegocio.menuActivo})}
+    className={`px-6 py-3 rounded-2xl font-black text-[9px] tracking-widest transition-all ${
+      nuevoNegocio.menuActivo 
+      ? 'bg-[#8B5CF6] text-white shadow-lg shadow-purple-500/20' 
+      : 'bg-[#121212] text-gray-600 border border-white/5'
+    }`}
+  >
+    {nuevoNegocio.menuActivo ? 'PLAN TOTAL ACTIVO' : 'SOLO TARJETA (GRATIS)'}
+  </button>
+</div>
+
+
 
           <button type="submit" className="w-full bg-[#8B5CF6] py-6 rounded-3xl font-black text-white shadow-2xl tracking-widest text-[11px]">
             {editandoId ? 'GUARDAR CAMBIOS' : 'PUBLICAR LOCAL'}

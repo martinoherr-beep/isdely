@@ -92,11 +92,15 @@ export default function Tarjeta({ negocio, esFavorito, onToggleFav, onClick }) {
 
         {/* BOTONES DE ACCIÓN */}
         <div className="flex gap-2.5 mt-auto">
-          <button 
-            className="flex-[2] py-4 bg-white/5 hover:bg-[#8B5CF6] border border-white/10 hover:border-[#8B5CF6] rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all text-white shadow-lg"
-          >
-            Ver Menú
-          </button>
+          {/* SI EL MENÚ ESTÁ ACTIVO, SE MUESTRA EL BOTÓN. SI NO, SE OCULTA */}
+  {negocio.menuActivo && (
+    <button 
+      onClick={onClick} 
+      className="flex-[2] py-4 bg-white/5 hover:bg-[#8B5CF6] border border-white/10 hover:border-[#8B5CF6] rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all text-white shadow-lg"
+    >
+      Ver Menú
+    </button>
+  )}
 
           <a 
             href={linkLlamar}
