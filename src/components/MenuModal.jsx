@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useCallback } from 'react';
 
 // Sub-componente optimizado para cada ítem del menú
+// Sub-componente optimizado para cada ítem del menú
 const MiembroMenu = React.memo(({ item, cantidad, onAdd, onRemove }) => {
   return (
     <div className="group relative flex items-center gap-3 bg-[#161616] p-3 rounded-2xl border border-white/5 hover:border-[#8B5CF6]/30 transition-all duration-300">
@@ -12,6 +13,15 @@ const MiembroMenu = React.memo(({ item, cantidad, onAdd, onRemove }) => {
       
       <div className="flex-1 min-w-0">
         <h4 className="text-[10px] font-black text-white/90 uppercase truncate">{item.nombre}</h4>
+        
+        {/* --- NUEVA DESCRIPCIÓN DEL PRODUCTO --- */}
+        {item.descripcionProducto && (
+          <p className="text-[9px] text-gray-500 leading-tight mt-0.5 italic line-clamp-2 uppercase font-bold">
+            {item.descripcionProducto}
+          </p>
+        )}
+        {/* -------------------------------------- */}
+
         <p className="text-[#8B5CF6] font-black text-lg leading-none mt-1">${item.precio}</p>
       </div>
 

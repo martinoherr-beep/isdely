@@ -6,7 +6,6 @@ export default function AdminPanel() {
   const [locales, setLocales] = useState([]);
   const [editandoId, setEditandoId] = useState(null);
   
-  // 1. ESTADO ACTUALIZADO CON DESCRIPCIÓN
   const [nuevoNegocio, setNuevoNegocio] = useState({ 
     nombre: '', 
     categoria: 'RESTAURANTE', 
@@ -14,8 +13,8 @@ export default function AdminPanel() {
     imagen: '', 
     telefono: '', 
     ubicacion: '', 
-    descripcion: '', // <-- Nuevo campo
-    menuActivo: false, // <--- NUEVO: Controla si se muestra el botón de menú
+    descripcion: '', 
+    menuActivo: false,
     productos: [] 
   });
 
@@ -23,7 +22,8 @@ export default function AdminPanel() {
     nombre: '', 
     precio: '', 
     imagen: '', 
-    categoriaInterna: '' 
+    categoriaInterna: '',
+    descripcionProducto: '' 
   });
 
   useEffect(() => {
@@ -47,7 +47,16 @@ export default function AdminPanel() {
       ...nuevoNegocio, 
       productos: [...(nuevoNegocio.productos || []), { ...tempProducto, categoriaInterna: catFinal }] 
     });
-    setTempProducto({ nombre: '', precio: '', imagen: '', categoriaInterna: '' });
+    setTempProducto({ nombre: '', precio: '', imagen: '', categoriaInterna: '', descripcionProducto: '' });
+  };
+
+  // --- FUNCIÓN PARA ELIMINAR ARTÍCULO DEL MENÚ ---
+  const eliminarProductoLista = (indexParaEliminar) => {
+    const nuevosProductos = nuevoNegocio.productos.filter((_, index) => index !== indexParaEliminar);
+    setNuevoNegocio({
+      ...nuevoNegocio,
+      productos: nuevosProductos
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -60,7 +69,7 @@ export default function AdminPanel() {
     setEditandoId(null);
     setNuevoNegocio({ 
       nombre: '', categoria: 'RESTAURANTE', promo: '', imagen: '', 
-      telefono: '', ubicacion: '', descripcion: '', productos: [] 
+      telefono: '', ubicacion: '', descripcion: '', menuActivo: false, productos: [] 
     });
     alert("Operación exitosa");
   };
@@ -95,7 +104,6 @@ export default function AdminPanel() {
             </select>
           </div>
 
-          {/* 2. CAMPO DE DESCRIPCIÓN AÑADIDO (OCUPA TODO EL ANCHO) */}
           <textarea 
             className="w-full bg-[#121212] border border-white/5 p-4 rounded-2xl text-white outline-none focus:border-[#8B5CF6] text-sm resize-none" 
             rows="3"
@@ -111,7 +119,6 @@ export default function AdminPanel() {
             <input type="text" className="bg-[#121212] border border-white/5 p-4 rounded-2xl text-white outline-none focus:border-[#8B5CF6]" value={nuevoNegocio.ubicacion} onChange={(e) => setNuevoNegocio({...nuevoNegocio, ubicacion: e.target.value})} placeholder="Ubicación (Ej: Av. Independencia #10)" />
           </div>
 
-          {/* SECCIÓN PRODUCTOS - SE MANTIENE IGUAL */}
           <div className="bg-black/20 p-8 rounded-[2rem] border border-white/5">
             <h3 className="text-[10px] font-black uppercase text-[#8B5CF6] mb-6 tracking-widest">Armado del Menú</h3>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
@@ -119,39 +126,53 @@ export default function AdminPanel() {
                 <input type="text" placeholder="PRODUCTO" className="bg-[#121212] p-3 rounded-xl text-xs text-white" value={tempProducto.nombre} onChange={(e) => setTempProducto({...tempProducto, nombre: e.target.value})} />
                 <input type="number" placeholder="PRECIO" className="bg-[#121212] p-3 rounded-xl text-xs text-white" value={tempProducto.precio} onChange={(e) => setTempProducto({...tempProducto, precio: e.target.value})} />
                 <input type="text" placeholder="URL FOTO" className="bg-[#121212] p-3 rounded-xl text-xs text-white" value={tempProducto.imagen} onChange={(e) => setTempProducto({...tempProducto, imagen: e.target.value})} />
+                
+                <div className="col-span-1 md:col-span-4 mt-2">
+                  <textarea 
+                    placeholder="DESCRIPCIÓN DEL PRODUCTO..." 
+                    className="w-full bg-[#121212] p-3 rounded-xl text-[10px] text-white outline-none border border-white/5 focus:border-[#8B5CF6]/50 resize-none"
+                    rows="2"
+                    value={tempProducto.descripcionProducto} 
+                    onChange={(e) => setTempProducto({...tempProducto, descripcionProducto: e.target.value})} 
+                  />
+                </div>
             </div>
             <button type="button" onClick={agregarProductoLista} className="w-full bg-[#8B5CF6]/10 text-[#8B5CF6] py-4 rounded-xl font-black text-[10px] uppercase hover:bg-[#8B5CF6] hover:text-white transition-all">+ Agregar al Menú</button>
             
-            {/* Vista previa de productos agregados */}
+            {/* VISTA PREVIA CON BOTÓN ELIMINAR */}
             <div className="mt-4 flex flex-wrap gap-2">
                 {nuevoNegocio.productos?.map((p, i) => (
-                    <span key={i} className="bg-white/5 text-[9px] px-3 py-1.5 rounded-lg border border-white/5 uppercase font-bold text-gray-400">
-                        {p.nombre} (${p.precio})
-                    </span>
+                    <div key={i} className="group relative bg-white/5 pl-3 pr-10 py-1.5 rounded-lg border border-white/5 uppercase font-bold text-gray-400 text-[9px] flex items-center">
+                        <span>{p.nombre} (${p.precio})</span>
+                        <button 
+                          type="button"
+                          onClick={() => eliminarProductoLista(i)}
+                          className="absolute right-1 w-6 h-6 flex items-center justify-center bg-red-500/10 text-red-500 rounded-md hover:bg-red-500 hover:text-white transition-all"
+                        >
+                          ✕
+                        </button>
+                    </div>
                 ))}
             </div>
           </div>
 
-        {/* --- INTERRUPTOR DE MENÚ --- */}
-<div className="flex items-center justify-between bg-[#8B5CF6]/5 p-6 rounded-3xl border border-[#8B5CF6]/20 mb-6">
-  <div>
-    <h4 className="text-white font-black text-[10px] uppercase tracking-widest">Estado del Menú</h4>
-    <p className="text-[9px] text-gray-500 uppercase font-bold">¿Activar carta de productos y pedidos?</p>
-  </div>
-  <button 
-    type="button"
-    onClick={() => setNuevoNegocio({...nuevoNegocio, menuActivo: !nuevoNegocio.menuActivo})}
-    className={`px-6 py-3 rounded-2xl font-black text-[9px] tracking-widest transition-all ${
-      nuevoNegocio.menuActivo 
-      ? 'bg-[#8B5CF6] text-white shadow-lg shadow-purple-500/20' 
-      : 'bg-[#121212] text-gray-600 border border-white/5'
-    }`}
-  >
-    {nuevoNegocio.menuActivo ? 'PLAN TOTAL ACTIVO' : 'SOLO TARJETA (GRATIS)'}
-  </button>
-</div>
-
-
+          <div className="flex items-center justify-between bg-[#8B5CF6]/5 p-6 rounded-3xl border border-[#8B5CF6]/20 mb-6">
+            <div>
+              <h4 className="text-white font-black text-[10px] uppercase tracking-widest">Estado del Menú</h4>
+              <p className="text-[9px] text-gray-500 uppercase font-bold">¿Activar carta de productos y pedidos?</p>
+            </div>
+            <button 
+              type="button"
+              onClick={() => setNuevoNegocio({...nuevoNegocio, menuActivo: !nuevoNegocio.menuActivo})}
+              className={`px-6 py-3 rounded-2xl font-black text-[9px] tracking-widest transition-all ${
+                nuevoNegocio.menuActivo 
+                ? 'bg-[#8B5CF6] text-white shadow-lg' 
+                : 'bg-[#121212] text-gray-600 border border-white/5'
+              }`}
+            >
+              {nuevoNegocio.menuActivo ? 'PLAN TOTAL ACTIVO' : 'SOLO TARJETA (GRATIS)'}
+            </button>
+          </div>
 
           <button type="submit" className="w-full bg-[#8B5CF6] py-6 rounded-3xl font-black text-white shadow-2xl tracking-widest text-[11px]">
             {editandoId ? 'GUARDAR CAMBIOS' : 'PUBLICAR LOCAL'}
@@ -159,7 +180,6 @@ export default function AdminPanel() {
         </form>
       </div>
 
-      {/* LISTA DE LOCALES EXISTENTES PARA GESTIÓN */}
       <div className="grid grid-cols-1 gap-4">
         {locales.map(loc => (
           <div key={loc.id} className="bg-[#1A1A1A] p-6 rounded-3xl border border-white/5 flex items-center justify-between group">
