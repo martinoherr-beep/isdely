@@ -66,18 +66,28 @@ function App() {
     }
   };
 
-  // --- LÓGICA DE FILTRADO Y ORDENAMIENTO POR PRIORIDAD ---
+  // --- LÓGICA DE FILTRADO (MULTI-CATEGORÍA) Y ORDENAMIENTO ---
   const localesFiltrados = locales
     .filter(loc => {
       const nombre = loc.nombre || "";
       const coincideBusca = nombre.toLowerCase().includes(busqueda.toLowerCase());
-      const coincideFiltro = filtro === 'TODO' || loc.categoria === filtro;
+      
+      // Ajuste para Multi-Categoría:
+      const categoriasDelLoc = Array.isArray(loc.categoria) ? loc.categoria : [loc.categoria];
+      const coincideFiltro = filtro === 'TODO' || categoriasDelLoc.includes(filtro);
+      
       const coincideFav = verFavoritos ? favoritos.includes(loc.id) : true;
       return coincideBusca && coincideFiltro && coincideFav;
     })
-    .sort((a, b) => (b.prioridad || 0) - (a.prioridad || 0)); // <--- ORDENA POR JERARQUÍA
+    .sort((a, b) => (b.prioridad || 0) - (a.prioridad || 0));
 
-  const categoriasExtraidas = [...new Set(locales.map(l => l.categoria))].filter(Boolean);
+  // --- EXTRACCIÓN DINÁMICA DE TODAS LAS CATEGORÍAS ---
+  const todasLasCategorias = locales.reduce((acc, loc) => {
+    const cats = Array.isArray(loc.categoria) ? loc.categoria : [loc.categoria];
+    return [...acc, ...cats];
+  }, []);
+  
+  const categoriasExtraidas = [...new Set(todasLasCategorias)].filter(Boolean);
   const listaCategorias = ['TODO', ...categoriasExtraidas];
 
   if (showSplash) {

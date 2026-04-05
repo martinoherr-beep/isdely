@@ -8,10 +8,9 @@ export default function Tarjeta({ negocio, esFavorito, onToggleFav, onClick }) {
   const linkLlamar = `tel:${negocio.telefono || ''}`;
   const linkWhatsApp = `https://wa.me/${negocio.telefono || ''}`;
   
-  // Enlace de Google Maps usando la ubicación de Firebase
+  // Enlace de Google Maps
   const linkMaps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${negocio.nombre}, ${negocio.ubicacion || 'Parral'}`)}`;
 
-  // Función para manejar el clic en la tarjeta (bloquea si no hay menú)
   const manejarClickTarjeta = () => {
     if (negocio.menuActivo) {
       onClick();
@@ -27,24 +26,23 @@ export default function Tarjeta({ negocio, esFavorito, onToggleFav, onClick }) {
         : 'border-white/5 hover:border-[#8B5CF6]/40'
       } ${negocio.menuActivo ? 'cursor-pointer' : 'cursor-default'}`}
     >
-     
-
+      
       {/* SECCIÓN IMAGEN */}
       <div className="relative h-60 overflow-hidden shrink-0">
         <img 
           src={imagenPortada} 
-         className="w-full h-full object-cover transition-all duration-700 opacity-80 group-hover:opacity-100 group-hover:scale-110"
+          className="w-full h-full object-cover transition-all duration-700 opacity-80 group-hover:opacity-100 group-hover:scale-110"
           onError={(e) => e.target.src = fallback}
           alt={negocio.nombre}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-transparent to-transparent opacity-90" />
     
-        {/* --- ETIQUETA PREMIUM POSICIONADA ABAJO A LA DERECHA --- */}
-  {negocio.prioridad > 0 && (
-    <div className="absolute bottom-4 right-4 bg-[#8B5CF6] text-white text-[8px] font-black px-4 py-2 rounded-xl tracking-[0.2em] z-30 shadow-2xl border border-white/10 uppercase italic">
-      Premium
-    </div>
-  )}
+        {/* ETIQUETA PREMIUM ABAJO A LA DERECHA */}
+        {negocio.prioridad > 0 && (
+          <div className="absolute bottom-4 right-4 bg-[#8B5CF6] text-white text-[8px] font-black px-4 py-2 rounded-xl tracking-[0.2em] z-30 shadow-2xl border border-white/10 uppercase italic">
+            Premium
+          </div>
+        )}
 
         {/* Badge de Promo */}
         {negocio.promo && (
@@ -69,11 +67,24 @@ export default function Tarjeta({ negocio, esFavorito, onToggleFav, onClick }) {
 
       {/* CUERPO DE LA TARJETA */}
       <div className="p-8 flex flex-col flex-1">
-        <div className="flex items-center gap-2 mb-2">
+        
+        {/* MULTI-CATEGORÍAS DINÁMICAS */}
+        <div className="flex flex-wrap items-center gap-2 mb-4">
            <div className={`h-[2px] w-4 ${negocio.prioridad > 0 ? 'bg-white' : 'bg-[#8B5CF6]'}`}></div>
-           <span className={`${negocio.prioridad > 0 ? 'text-white' : 'text-[#8B5CF6]'} text-[10px] font-black uppercase tracking-[0.3em]`}>
-             {negocio.categoria}
-           </span>
+           {Array.isArray(negocio.categoria) ? (
+             negocio.categoria.map((cat, i) => (
+               <span 
+                 key={i} 
+                 className={`${negocio.prioridad > 0 ? 'text-white border-white/20' : 'text-[#8B5CF6] border-[#8B5CF6]/20'} text-[9px] font-black uppercase tracking-[0.2em] border px-2 py-0.5 rounded-md bg-white/5`}
+               >
+                 {cat}
+               </span>
+             ))
+           ) : (
+             <span className={`${negocio.prioridad > 0 ? 'text-white' : 'text-[#8B5CF6]'} text-[10px] font-black uppercase tracking-[0.3em]`}>
+               {negocio.categoria}
+             </span>
+           )}
         </div>
         
         <h3 className="text-3xl font-black italic uppercase text-white mb-4 leading-none tracking-tighter">

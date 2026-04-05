@@ -6,25 +6,24 @@ export default function AdminPanel() {
   const [locales, setLocales] = useState([]);
   const [editandoId, setEditandoId] = useState(null);
   
+  // Estado para el texto que se está escribiendo en el input de categorías
+  const [busquedaCat, setBusquedaCat] = useState('');
+
   const [nuevoNegocio, setNuevoNegocio] = useState({ 
     nombre: '', 
-    categoria: 'RESTAURANTE', 
+    categoria: [], // Ahora siempre lo manejaremos como Array internamente
     promo: '', 
     imagen: '', 
     telefono: '', 
     ubicacion: '', 
     descripcion: '', 
     menuActivo: false,
-    prioridad: 0, 
+    prioridad: 0,
     productos: [] 
   });
 
   const [tempProducto, setTempProducto] = useState({ 
-    nombre: '', 
-    precio: '', 
-    imagen: '', 
-    categoriaInterna: '',
-    descripcionProducto: '' 
+    nombre: '', precio: '', imagen: '', categoriaInterna: '', descripcionProducto: '' 
   });
 
   useEffect(() => {
@@ -35,177 +34,223 @@ export default function AdminPanel() {
     return () => unsub();
   }, []);
 
-  const seleccionarParaEditar = (loc) => {
-    setEditandoId(loc.id);
-    setNuevoNegocio({ ...loc, prioridad: loc.prioridad || 0 });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  // --- LÓGICA DE CATEGORÍAS ---
+  const todasLasCategoriasExistentes = [...new Set(locales.flatMap(l => 
+    Array.isArray(l.categoria) ? l.categoria : [l.categoria]
+  ))].filter(Boolean);
+
+  const agregarCategoria = (cat) => {
+    const limpia = cat.trim().toUpperCase();
+    if (limpia && !nuevoNegocio.categoria.includes(limpia)) {
+      setNuevoNegocio({
+        ...nuevoNegocio,
+        categoria: [...nuevoNegocio.categoria, limpia]
+      });
+    }
+    setBusquedaCat('');
   };
 
-  const agregarProductoLista = () => {
-    if (!tempProducto.nombre || !tempProducto.precio) return alert("Nombre y precio obligatorios");
-    const catFinal = (tempProducto.categoriaInterna || 'GENERAL').trim().toUpperCase();
-    setNuevoNegocio({ 
-      ...nuevoNegocio, 
-      productos: [...(nuevoNegocio.productos || []), { ...tempProducto, categoriaInterna: catFinal }] 
-    });
-    setTempProducto({ nombre: '', precio: '', imagen: '', categoriaInterna: '', descripcionProducto: '' });
-  };
-
-  const eliminarProductoLista = (indexParaEliminar) => {
-    const nuevosProductos = nuevoNegocio.productos.filter((_, index) => index !== indexParaEliminar);
+  const quitarCategoria = (catParaQuitar) => {
     setNuevoNegocio({
       ...nuevoNegocio,
-      productos: nuevosProductos
+      categoria: nuevoNegocio.categoria.filter(c => c !== catParaQuitar)
     });
+  };
+
+  const seleccionarParaEditar = (loc) => {
+    setEditandoId(loc.id);
+    setNuevoNegocio({ 
+      ...loc, 
+      categoria: Array.isArray(loc.categoria) ? loc.categoria : [loc.categoria],
+      prioridad: loc.prioridad || 0 
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (editandoId) {
-      await updateDoc(doc(db, "locales", editandoId), nuevoNegocio);
-    } else {
-      await addDoc(collection(db, "locales"), nuevoNegocio);
+    if (nuevoNegocio.categoria.length === 0) return alert("Agrega al menos una categoría");
+
+    try {
+      if (editandoId) {
+        await updateDoc(doc(db, "locales", editandoId), nuevoNegocio);
+      } else {
+        await addDoc(collection(db, "locales"), nuevoNegocio);
+      }
+      setEditandoId(null);
+      setNuevoNegocio({ 
+        nombre: '', categoria: [], promo: '', imagen: '', 
+        telefono: '', ubicacion: '', descripcion: '', menuActivo: false, 
+        prioridad: 0, productos: [] 
+      });
+      alert("¡Operación exitosa!");
+    } catch (error) {
+      alert("Error al guardar");
     }
-    setEditandoId(null);
+  };
+
+  const eliminarProductoLista = (index) => {
+    const nuevos = nuevoNegocio.productos.filter((_, i) => i !== index);
+    setNuevoNegocio({ ...nuevoNegocio, productos: nuevos });
+  };
+
+  const agregarProductoLista = () => {
+    if (!tempProducto.nombre || !tempProducto.precio) return alert("Nombre y precio obligatorios");
     setNuevoNegocio({ 
-      nombre: '', categoria: 'RESTAURANTE', promo: '', imagen: '', 
-      telefono: '', ubicacion: '', descripcion: '', menuActivo: false, 
-      prioridad: 0, 
-      productos: [] 
+      ...nuevoNegocio, 
+      productos: [...(nuevoNegocio.productos || []), { ...tempProducto, categoriaInterna: (tempProducto.categoriaInterna || 'GENERAL').toUpperCase() }] 
     });
-    alert("Operación exitosa");
+    setTempProducto({ nombre: '', precio: '', imagen: '', categoriaInterna: '', descripcionProducto: '' });
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-12 mb-24 animate-in fade-in">
-      <div className="bg-[#1A1A1A] p-10 rounded-[2.5rem] border border-white/5 shadow-2xl">
+    <div className="max-w-4xl mx-auto space-y-12 mb-24 p-4">
+      <div className="bg-[#1A1A1A] p-6 md:p-10 rounded-[2.5rem] border border-white/5 shadow-2xl">
         <h2 className="text-3xl font-black italic uppercase text-center mb-10 tracking-tighter">
           {editandoId ? 'EDITANDO' : 'PANEL'} <span className="text-[#8B5CF6]">ISDELY</span>
         </h2>
         
         <form onSubmit={handleSubmit} className="space-y-8">
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="flex flex-col gap-2">
-              <span className="text-[10px] font-black text-gray-500 uppercase ml-2">Nombre</span>
+              <label className="text-[10px] font-black text-gray-500 uppercase ml-2 italic">Nombre del Local</label>
               <input 
                 type="text" 
                 className="bg-[#121212] border border-white/5 p-4 rounded-2xl text-white outline-none focus:border-[#8B5CF6]" 
                 value={nuevoNegocio.nombre} 
                 onChange={(e) => setNuevoNegocio({...nuevoNegocio, nombre: e.target.value})} 
-                placeholder="Nombre del Local" 
-                required 
-              />
-            </div>
-            
-            <div className="flex flex-col gap-2">
-              <span className="text-[10px] font-black text-[#8B5CF6] uppercase ml-2 italic">Prioridad (0-10)</span>
-              <input 
-                type="number" 
-                className="w-full bg-[#121212] border border-[#8B5CF6]/30 p-4 rounded-2xl text-[#8B5CF6] font-black outline-none focus:border-[#8B5CF6]" 
-                value={nuevoNegocio.prioridad} 
-                onChange={(e) => setNuevoNegocio({...nuevoNegocio, prioridad: Number(e.target.value)})} 
-                placeholder="0" 
+                placeholder="Ej: La Boneleria" required 
               />
             </div>
 
+            {/* SISTEMA DE CATEGORÍAS POR SELECCIÓN O ESCRITURA */}
             <div className="flex flex-col gap-2">
-              <span className="text-[10px] font-black text-gray-500 uppercase ml-2">Categoría</span>
-              <select 
-                className="bg-[#121212] border border-white/5 p-4 rounded-2xl text-gray-400 outline-none focus:border-[#8B5CF6] h-[58px]" 
-                value={nuevoNegocio.categoria} 
-                onChange={(e) => setNuevoNegocio({...nuevoNegocio, categoria: e.target.value})}
-              >
-                  <option value="RESTAURANTE">RESTAURANTE</option>
-                  <option value="PARRILLA">PARRILLA</option>
-                  <option value="MARISCO">MARISCO</option>
-                  <option value="BAR">BAR</option>
-                  <option value="POSTRES">POSTRES</option>
-              </select>
+              <label className="text-[10px] font-black text-[#8B5CF6] uppercase ml-2 italic">Categorías (Selecciona o escribe)</label>
+              
+              {/* Chips de categorías seleccionadas */}
+              <div className="flex flex-wrap gap-2 mb-2">
+                {nuevoNegocio.categoria.map(cat => (
+                  <span key={cat} className="bg-[#8B5CF6] text-white text-[9px] font-black px-3 py-1.5 rounded-lg flex items-center gap-2 uppercase tracking-widest shadow-lg animate-in zoom-in">
+                    {cat}
+                    <button type="button" onClick={() => quitarCategoria(cat)} className="hover:text-black">✕</button>
+                  </span>
+                ))}
+              </div>
+
+              <input 
+                type="text" 
+                className="bg-[#121212] border border-white/5 p-4 rounded-2xl text-white outline-none focus:border-[#8B5CF6] uppercase" 
+                value={busquedaCat}
+                placeholder="Escribe y presiona Enter..."
+                onChange={(e) => setBusquedaCat(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ',') {
+                    e.preventDefault();
+                    agregarCategoria(busquedaCat);
+                  }
+                }}
+              />
+
+              {/* Sugerencias de categorías existentes */}
+              <div className="flex flex-wrap gap-2 mt-2">
+                {todasLasCategoriasExistentes
+                  .filter(c => !nuevoNegocio.categoria.includes(c))
+                  .map(cat => (
+                    <button 
+                      key={cat} 
+                      type="button"
+                      onClick={() => agregarCategoria(cat)}
+                      className="text-[8px] font-black border border-white/10 px-2 py-1 rounded-md text-gray-500 hover:border-[#8B5CF6] hover:text-[#8B5CF6] uppercase transition-all"
+                    >
+                      + {cat}
+                    </button>
+                ))}
+              </div>
             </div>
+          </div>
+
+          <div className="bg-[#8B5CF6]/5 border border-[#8B5CF6]/20 p-5 rounded-3xl flex items-center justify-between">
+            <div className="flex flex-col gap-1">
+              <h4 className="text-[#8B5CF6] font-black text-xs uppercase tracking-tighter">Jerarquía de Visualización</h4>
+              <p className="text-[10px] text-gray-500 font-bold uppercase italic">Números altos (ej. 10) fijan el negocio arriba.</p>
+            </div>
+            <input 
+              type="number" 
+              className="w-28 bg-[#121212] border-2 border-[#8B5CF6] p-4 rounded-2xl text-[#8B5CF6] font-black text-center text-xl outline-none" 
+              value={nuevoNegocio.prioridad} 
+              onChange={(e) => setNuevoNegocio({...nuevoNegocio, prioridad: Number(e.target.value)})} 
+            />
           </div>
 
           <textarea 
             className="w-full bg-[#121212] border border-white/5 p-4 rounded-2xl text-white outline-none focus:border-[#8B5CF6] text-sm resize-none" 
-            rows="3"
+            rows="2"
             value={nuevoNegocio.descripcion} 
             onChange={(e) => setNuevoNegocio({...nuevoNegocio, descripcion: e.target.value})} 
-            placeholder="Descripción del negocio..." 
+            placeholder="Descripción corta..." 
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <input type="text" className="bg-[#121212] border border-white/5 p-4 rounded-2xl text-white outline-none focus:border-[#8B5CF6]" value={nuevoNegocio.promo} onChange={(e) => setNuevoNegocio({...nuevoNegocio, promo: e.target.value})} placeholder="Promo (Ej: 2x1 en Alitas)" />
-            <input type="text" className="bg-[#121212] border border-white/5 p-4 rounded-2xl text-white outline-none focus:border-[#8B5CF6]" value={nuevoNegocio.imagen} onChange={(e) => setNuevoNegocio({...nuevoNegocio, imagen: e.target.value})} placeholder="URL Imagen Portada" />
-            <input type="text" className="bg-[#121212] border border-white/5 p-4 rounded-2xl text-white outline-none focus:border-[#8B5CF6]" value={nuevoNegocio.telefono} onChange={(e) => setNuevoNegocio({...nuevoNegocio, telefono: e.target.value})} placeholder="WhatsApp (Ej: 526271234567)" />
-            <input type="text" className="bg-[#121212] border border-white/5 p-4 rounded-2xl text-white outline-none focus:border-[#8B5CF6]" value={nuevoNegocio.ubicacion} onChange={(e) => setNuevoNegocio({...nuevoNegocio, ubicacion: e.target.value})} placeholder="Ubicación (Ej: Av. Independencia #10)" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input type="text" className="bg-[#121212] border border-white/10 p-4 rounded-xl text-xs" value={nuevoNegocio.promo} onChange={(e) => setNuevoNegocio({...nuevoNegocio, promo: e.target.value})} placeholder="Promo" />
+            <input type="text" className="bg-[#121212] border border-white/10 p-4 rounded-xl text-xs" value={nuevoNegocio.imagen} onChange={(e) => setNuevoNegocio({...nuevoNegocio, imagen: e.target.value})} placeholder="URL Imagen" />
+            <input type="text" className="bg-[#121212] border border-white/10 p-4 rounded-xl text-xs" value={nuevoNegocio.telefono} onChange={(e) => setNuevoNegocio({...nuevoNegocio, telefono: e.target.value})} placeholder="WhatsApp" />
+            <input type="text" className="bg-[#121212] border border-white/10 p-4 rounded-xl text-xs" value={nuevoNegocio.ubicacion} onChange={(e) => setNuevoNegocio({...nuevoNegocio, ubicacion: e.target.value})} placeholder="Ubicación" />
           </div>
 
-          {/* MENÚ */}
-          <div className="bg-black/20 p-8 rounded-[2rem] border border-white/5">
-            <h3 className="text-[10px] font-black uppercase text-[#8B5CF6] mb-6 tracking-widest">Armado del Menú</h3>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                <input type="text" placeholder="SECCIÓN" className="bg-[#121212] p-3 rounded-xl text-xs text-white" value={tempProducto.categoriaInterna} onChange={(e) => setTempProducto({...tempProducto, categoriaInterna: e.target.value})} />
-                <input type="text" placeholder="PRODUCTO" className="bg-[#121212] p-3 rounded-xl text-xs text-white" value={tempProducto.nombre} onChange={(e) => setTempProducto({...tempProducto, nombre: e.target.value})} />
-                <input type="number" placeholder="PRECIO" className="bg-[#121212] p-3 rounded-xl text-xs text-white" value={tempProducto.precio} onChange={(e) => setTempProducto({...tempProducto, precio: e.target.value})} />
-                <input type="text" placeholder="URL FOTO" className="bg-[#121212] p-3 rounded-xl text-xs text-white" value={tempProducto.imagen} onChange={(e) => setTempProducto({...tempProducto, imagen: e.target.value})} />
-                <div className="col-span-1 md:col-span-4 mt-2">
-                  <textarea 
-                    placeholder="DESCRIPCIÓN DEL PRODUCTO..." 
-                    className="w-full bg-[#121212] p-3 rounded-xl text-[10px] text-white outline-none border border-white/5 focus:border-[#8B5CF6]/50 resize-none"
-                    rows="2"
-                    value={tempProducto.descripcionProducto} 
-                    onChange={(e) => setTempProducto({...tempProducto, descripcionProducto: e.target.value})} 
-                  />
-                </div>
+          <div className="bg-black/20 p-6 rounded-[2rem] border border-white/5">
+            <h3 className="text-[10px] font-black uppercase text-[#8B5CF6] mb-4 tracking-widest">Menú</h3>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                <input type="text" placeholder="SECCIÓN" className="bg-[#121212] p-3 rounded-xl text-[10px]" value={tempProducto.categoriaInterna} onChange={(e) => setTempProducto({...tempProducto, categoriaInterna: e.target.value})} />
+                <input type="text" placeholder="PRODUCTO" className="bg-[#121212] p-3 rounded-xl text-[10px]" value={tempProducto.nombre} onChange={(e) => setTempProducto({...tempProducto, nombre: e.target.value})} />
+                <input type="number" placeholder="PRECIO" className="bg-[#121212] p-3 rounded-xl text-[10px]" value={tempProducto.precio} onChange={(e) => setTempProducto({...tempProducto, precio: e.target.value})} />
+                <input type="text" placeholder="FOTO" className="bg-[#121212] p-3 rounded-xl text-[10px]" value={tempProducto.imagen} onChange={(e) => setTempProducto({...tempProducto, imagen: e.target.value})} />
             </div>
-            <button type="button" onClick={agregarProductoLista} className="w-full bg-[#8B5CF6]/10 text-[#8B5CF6] py-4 rounded-xl font-black text-[10px] uppercase hover:bg-[#8B5CF6] hover:text-white transition-all">+ Agregar al Menú</button>
+            <button type="button" onClick={agregarProductoLista} className="w-full bg-[#8B5CF6]/10 text-[#8B5CF6] py-3 rounded-xl font-black text-[9px] uppercase">+ Añadir al menú</button>
             <div className="mt-4 flex flex-wrap gap-2">
                 {nuevoNegocio.productos?.map((p, i) => (
-                    <div key={i} className="group relative bg-white/5 pl-3 pr-10 py-1.5 rounded-lg border border-white/5 uppercase font-bold text-gray-400 text-[9px] flex items-center">
-                        <span>{p.nombre} (${p.precio})</span>
-                        <button type="button" onClick={() => eliminarProductoLista(i)} className="absolute right-1 w-6 h-6 flex items-center justify-center bg-red-500/10 text-red-500 rounded-md hover:bg-red-500 hover:text-white transition-all">✕</button>
+                    <div key={i} className="bg-white/5 pl-3 pr-8 py-1 rounded-lg border border-white/5 text-[9px] relative flex items-center">
+                        {p.nombre} (${p.precio})
+                        <button type="button" onClick={() => eliminarProductoLista(i)} className="absolute right-1 text-red-500 font-black">✕</button>
                     </div>
                 ))}
             </div>
           </div>
 
-          <div className="flex items-center justify-between bg-[#8B5CF6]/5 p-6 rounded-3xl border border-[#8B5CF6]/20 mb-6">
-            <div>
-              <h4 className="text-white font-black text-[10px] uppercase tracking-widest">Estado del Menú</h4>
-              <p className="text-[9px] text-gray-500 uppercase font-bold">¿Activar carta de productos y pedidos?</p>
-            </div>
+          <div className="flex items-center justify-between bg-[#8B5CF6]/5 p-6 rounded-3xl border border-[#8B5CF6]/20">
+            <span className="text-[10px] font-black text-white uppercase tracking-widest">¿Activar Menú Digital?</span>
             <button 
               type="button"
               onClick={() => setNuevoNegocio({...nuevoNegocio, menuActivo: !nuevoNegocio.menuActivo})}
-              className={`px-6 py-3 rounded-2xl font-black text-[9px] tracking-widest transition-all ${nuevoNegocio.menuActivo ? 'bg-[#8B5CF6] text-white shadow-lg' : 'bg-[#121212] text-gray-600 border border-white/5'}`}
+              className={`px-6 py-3 rounded-2xl font-black text-[9px] transition-all ${nuevoNegocio.menuActivo ? 'bg-[#8B5CF6] text-white' : 'bg-[#121212] text-gray-600 border border-white/5'}`}
             >
-              {nuevoNegocio.menuActivo ? 'PLAN TOTAL ACTIVO' : 'SOLO TARJETA (GRATIS)'}
+              {nuevoNegocio.menuActivo ? 'ACTIVO' : 'INACTIVO'}
             </button>
           </div>
 
-          <button type="submit" className="w-full bg-[#8B5CF6] py-6 rounded-3xl font-black text-white shadow-2xl tracking-widest text-[11px]">
-            {editandoId ? 'GUARDAR CAMBIOS' : 'PUBLICAR LOCAL'}
+          <button type="submit" className="w-full bg-[#8B5CF6] py-6 rounded-3xl font-black text-white shadow-2xl tracking-widest text-[11px] uppercase">
+            {editandoId ? 'Guardar Cambios' : 'Publicar Negocio'}
           </button>
         </form>
       </div>
 
-      {/* LISTA PARA GESTIONAR */}
       <div className="grid grid-cols-1 gap-4">
         {locales.map(loc => (
-          <div key={loc.id} className="bg-[#1A1A1A] p-6 rounded-3xl border border-white/5 flex items-center justify-between group">
+          <div key={loc.id} className="bg-[#1A1A1A] p-5 rounded-3xl border border-white/5 flex items-center justify-between group">
             <div className="flex items-center gap-4">
-              <img src={loc.imagen || loc.img} className="w-12 h-12 rounded-xl object-cover grayscale group-hover:grayscale-0 transition-all" alt="" />
+              <img src={loc.imagen || loc.img} className="w-10 h-10 rounded-xl object-cover" alt="" />
               <div>
-                <div className="flex items-center gap-2">
-                  <h4 className="font-black text-white uppercase text-sm tracking-tighter">{loc.nombre}</h4>
-                  {loc.prioridad > 0 && <span className="bg-[#8B5CF6]/10 text-[#8B5CF6] text-[7px] font-black px-2 py-0.5 rounded-full border border-[#8B5CF6]/20 uppercase tracking-widest">P: {loc.prioridad}</span>}
+                <h4 className="font-black text-white uppercase text-xs">{loc.nombre}</h4>
+                <div className="flex gap-1 mt-1">
+                  {(Array.isArray(loc.categoria) ? loc.categoria : [loc.categoria]).map(c => (
+                    <span key={c} className="text-[7px] bg-[#8B5CF6]/10 text-[#8B5CF6] px-1 rounded uppercase font-bold">{c}</span>
+                  ))}
                 </div>
-                <p className="text-[9px] text-gray-500 font-bold uppercase tracking-widest">{loc.categoria}</p>
               </div>
             </div>
             <div className="flex gap-2">
-              <button onClick={() => seleccionarParaEditar(loc)} className="p-3 bg-white/5 rounded-xl hover:bg-[#8B5CF6] transition-colors">✏️</button>
-              <button onClick={async () => { if(window.confirm("¿Eliminar local?")) await deleteDoc(doc(db, "locales", loc.id)) }} className="p-3 bg-white/5 rounded-xl hover:bg-red-500 transition-colors">🗑️</button>
+              <button onClick={() => seleccionarParaEditar(loc)} className="p-2 bg-white/5 rounded-lg hover:bg-[#8B5CF6] transition-colors">✏️</button>
+              <button onClick={async () => { if(window.confirm("¿Borrar?")) await deleteDoc(doc(db, "locales", loc.id)) }} className="p-2 bg-white/5 rounded-lg hover:bg-red-500 transition-colors">🗑️</button>
             </div>
           </div>
         ))}
