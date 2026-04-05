@@ -15,6 +15,7 @@ export default function AdminPanel() {
     ubicacion: '', 
     descripcion: '', 
     menuActivo: false,
+    prioridad: 0, 
     productos: [] 
   });
 
@@ -36,7 +37,7 @@ export default function AdminPanel() {
 
   const seleccionarParaEditar = (loc) => {
     setEditandoId(loc.id);
-    setNuevoNegocio({ ...loc });
+    setNuevoNegocio({ ...loc, prioridad: loc.prioridad || 0 });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -50,7 +51,6 @@ export default function AdminPanel() {
     setTempProducto({ nombre: '', precio: '', imagen: '', categoriaInterna: '', descripcionProducto: '' });
   };
 
-  // --- FUNCIÓN PARA ELIMINAR ARTÍCULO DEL MENÚ ---
   const eliminarProductoLista = (indexParaEliminar) => {
     const nuevosProductos = nuevoNegocio.productos.filter((_, index) => index !== indexParaEliminar);
     setNuevoNegocio({
@@ -69,7 +69,9 @@ export default function AdminPanel() {
     setEditandoId(null);
     setNuevoNegocio({ 
       nombre: '', categoria: 'RESTAURANTE', promo: '', imagen: '', 
-      telefono: '', ubicacion: '', descripcion: '', menuActivo: false, productos: [] 
+      telefono: '', ubicacion: '', descripcion: '', menuActivo: false, 
+      prioridad: 0, 
+      productos: [] 
     });
     alert("Operación exitosa");
   };
@@ -82,26 +84,45 @@ export default function AdminPanel() {
         </h2>
         
         <form onSubmit={handleSubmit} className="space-y-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <input 
-              type="text" 
-              className="bg-[#121212] border border-white/5 p-4 rounded-2xl text-white outline-none focus:border-[#8B5CF6]" 
-              value={nuevoNegocio.nombre} 
-              onChange={(e) => setNuevoNegocio({...nuevoNegocio, nombre: e.target.value})} 
-              placeholder="Nombre del Local" 
-              required 
-            />
-            <select 
-              className="bg-[#121212] border border-white/5 p-4 rounded-2xl text-gray-400 outline-none focus:border-[#8B5CF6]" 
-              value={nuevoNegocio.categoria} 
-              onChange={(e) => setNuevoNegocio({...nuevoNegocio, categoria: e.target.value})}
-            >
-                <option value="RESTAURANTE">RESTAURANTE</option>
-                <option value="PARRILLA">PARRILLA</option>
-                <option value="MARISCO">MARISCO</option>
-                <option value="BAR">BAR</option>
-                <option value="POSTRES">POSTRES</option>
-            </select>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="flex flex-col gap-2">
+              <span className="text-[10px] font-black text-gray-500 uppercase ml-2">Nombre</span>
+              <input 
+                type="text" 
+                className="bg-[#121212] border border-white/5 p-4 rounded-2xl text-white outline-none focus:border-[#8B5CF6]" 
+                value={nuevoNegocio.nombre} 
+                onChange={(e) => setNuevoNegocio({...nuevoNegocio, nombre: e.target.value})} 
+                placeholder="Nombre del Local" 
+                required 
+              />
+            </div>
+            
+            <div className="flex flex-col gap-2">
+              <span className="text-[10px] font-black text-[#8B5CF6] uppercase ml-2 italic">Prioridad (0-10)</span>
+              <input 
+                type="number" 
+                className="w-full bg-[#121212] border border-[#8B5CF6]/30 p-4 rounded-2xl text-[#8B5CF6] font-black outline-none focus:border-[#8B5CF6]" 
+                value={nuevoNegocio.prioridad} 
+                onChange={(e) => setNuevoNegocio({...nuevoNegocio, prioridad: Number(e.target.value)})} 
+                placeholder="0" 
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <span className="text-[10px] font-black text-gray-500 uppercase ml-2">Categoría</span>
+              <select 
+                className="bg-[#121212] border border-white/5 p-4 rounded-2xl text-gray-400 outline-none focus:border-[#8B5CF6] h-[58px]" 
+                value={nuevoNegocio.categoria} 
+                onChange={(e) => setNuevoNegocio({...nuevoNegocio, categoria: e.target.value})}
+              >
+                  <option value="RESTAURANTE">RESTAURANTE</option>
+                  <option value="PARRILLA">PARRILLA</option>
+                  <option value="MARISCO">MARISCO</option>
+                  <option value="BAR">BAR</option>
+                  <option value="POSTRES">POSTRES</option>
+              </select>
+            </div>
           </div>
 
           <textarea 
@@ -109,7 +130,7 @@ export default function AdminPanel() {
             rows="3"
             value={nuevoNegocio.descripcion} 
             onChange={(e) => setNuevoNegocio({...nuevoNegocio, descripcion: e.target.value})} 
-            placeholder="Descripción del negocio (Historia, especialidad, etc.)" 
+            placeholder="Descripción del negocio..." 
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -119,14 +140,14 @@ export default function AdminPanel() {
             <input type="text" className="bg-[#121212] border border-white/5 p-4 rounded-2xl text-white outline-none focus:border-[#8B5CF6]" value={nuevoNegocio.ubicacion} onChange={(e) => setNuevoNegocio({...nuevoNegocio, ubicacion: e.target.value})} placeholder="Ubicación (Ej: Av. Independencia #10)" />
           </div>
 
+          {/* MENÚ */}
           <div className="bg-black/20 p-8 rounded-[2rem] border border-white/5">
             <h3 className="text-[10px] font-black uppercase text-[#8B5CF6] mb-6 tracking-widest">Armado del Menú</h3>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                <input type="text" placeholder="SECCIÓN (BEBIDAS)" className="bg-[#121212] p-3 rounded-xl text-xs text-white" value={tempProducto.categoriaInterna} onChange={(e) => setTempProducto({...tempProducto, categoriaInterna: e.target.value})} />
+                <input type="text" placeholder="SECCIÓN" className="bg-[#121212] p-3 rounded-xl text-xs text-white" value={tempProducto.categoriaInterna} onChange={(e) => setTempProducto({...tempProducto, categoriaInterna: e.target.value})} />
                 <input type="text" placeholder="PRODUCTO" className="bg-[#121212] p-3 rounded-xl text-xs text-white" value={tempProducto.nombre} onChange={(e) => setTempProducto({...tempProducto, nombre: e.target.value})} />
                 <input type="number" placeholder="PRECIO" className="bg-[#121212] p-3 rounded-xl text-xs text-white" value={tempProducto.precio} onChange={(e) => setTempProducto({...tempProducto, precio: e.target.value})} />
                 <input type="text" placeholder="URL FOTO" className="bg-[#121212] p-3 rounded-xl text-xs text-white" value={tempProducto.imagen} onChange={(e) => setTempProducto({...tempProducto, imagen: e.target.value})} />
-                
                 <div className="col-span-1 md:col-span-4 mt-2">
                   <textarea 
                     placeholder="DESCRIPCIÓN DEL PRODUCTO..." 
@@ -138,19 +159,11 @@ export default function AdminPanel() {
                 </div>
             </div>
             <button type="button" onClick={agregarProductoLista} className="w-full bg-[#8B5CF6]/10 text-[#8B5CF6] py-4 rounded-xl font-black text-[10px] uppercase hover:bg-[#8B5CF6] hover:text-white transition-all">+ Agregar al Menú</button>
-            
-            {/* VISTA PREVIA CON BOTÓN ELIMINAR */}
             <div className="mt-4 flex flex-wrap gap-2">
                 {nuevoNegocio.productos?.map((p, i) => (
                     <div key={i} className="group relative bg-white/5 pl-3 pr-10 py-1.5 rounded-lg border border-white/5 uppercase font-bold text-gray-400 text-[9px] flex items-center">
                         <span>{p.nombre} (${p.precio})</span>
-                        <button 
-                          type="button"
-                          onClick={() => eliminarProductoLista(i)}
-                          className="absolute right-1 w-6 h-6 flex items-center justify-center bg-red-500/10 text-red-500 rounded-md hover:bg-red-500 hover:text-white transition-all"
-                        >
-                          ✕
-                        </button>
+                        <button type="button" onClick={() => eliminarProductoLista(i)} className="absolute right-1 w-6 h-6 flex items-center justify-center bg-red-500/10 text-red-500 rounded-md hover:bg-red-500 hover:text-white transition-all">✕</button>
                     </div>
                 ))}
             </div>
@@ -164,11 +177,7 @@ export default function AdminPanel() {
             <button 
               type="button"
               onClick={() => setNuevoNegocio({...nuevoNegocio, menuActivo: !nuevoNegocio.menuActivo})}
-              className={`px-6 py-3 rounded-2xl font-black text-[9px] tracking-widest transition-all ${
-                nuevoNegocio.menuActivo 
-                ? 'bg-[#8B5CF6] text-white shadow-lg' 
-                : 'bg-[#121212] text-gray-600 border border-white/5'
-              }`}
+              className={`px-6 py-3 rounded-2xl font-black text-[9px] tracking-widest transition-all ${nuevoNegocio.menuActivo ? 'bg-[#8B5CF6] text-white shadow-lg' : 'bg-[#121212] text-gray-600 border border-white/5'}`}
             >
               {nuevoNegocio.menuActivo ? 'PLAN TOTAL ACTIVO' : 'SOLO TARJETA (GRATIS)'}
             </button>
@@ -180,23 +189,23 @@ export default function AdminPanel() {
         </form>
       </div>
 
+      {/* LISTA PARA GESTIONAR */}
       <div className="grid grid-cols-1 gap-4">
         {locales.map(loc => (
           <div key={loc.id} className="bg-[#1A1A1A] p-6 rounded-3xl border border-white/5 flex items-center justify-between group">
             <div className="flex items-center gap-4">
               <img src={loc.imagen || loc.img} className="w-12 h-12 rounded-xl object-cover grayscale group-hover:grayscale-0 transition-all" alt="" />
               <div>
-                <h4 className="font-black text-white uppercase text-sm tracking-tighter">{loc.nombre}</h4>
+                <div className="flex items-center gap-2">
+                  <h4 className="font-black text-white uppercase text-sm tracking-tighter">{loc.nombre}</h4>
+                  {loc.prioridad > 0 && <span className="bg-[#8B5CF6]/10 text-[#8B5CF6] text-[7px] font-black px-2 py-0.5 rounded-full border border-[#8B5CF6]/20 uppercase tracking-widest">P: {loc.prioridad}</span>}
+                </div>
                 <p className="text-[9px] text-gray-500 font-bold uppercase tracking-widest">{loc.categoria}</p>
               </div>
             </div>
             <div className="flex gap-2">
-              <button onClick={() => seleccionarParaEditar(loc)} className="p-3 bg-white/5 rounded-xl hover:bg-[#8B5CF6] transition-colors">
-                ✏️
-              </button>
-              <button onClick={async () => { if(window.confirm("¿Eliminar local?")) await deleteDoc(doc(db, "locales", loc.id)) }} className="p-3 bg-white/5 rounded-xl hover:bg-red-500 transition-colors">
-                🗑️
-              </button>
+              <button onClick={() => seleccionarParaEditar(loc)} className="p-3 bg-white/5 rounded-xl hover:bg-[#8B5CF6] transition-colors">✏️</button>
+              <button onClick={async () => { if(window.confirm("¿Eliminar local?")) await deleteDoc(doc(db, "locales", loc.id)) }} className="p-3 bg-white/5 rounded-xl hover:bg-red-500 transition-colors">🗑️</button>
             </div>
           </div>
         ))}

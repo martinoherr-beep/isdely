@@ -66,13 +66,16 @@ function App() {
     }
   };
 
-  const localesFiltrados = locales.filter(loc => {
-    const nombre = loc.nombre || "";
-    const coincideBusca = nombre.toLowerCase().includes(busqueda.toLowerCase());
-    const coincideFiltro = filtro === 'TODO' || loc.categoria === filtro;
-    const coincideFav = verFavoritos ? favoritos.includes(loc.id) : true;
-    return coincideBusca && coincideFiltro && coincideFav;
-  });
+  // --- LÓGICA DE FILTRADO Y ORDENAMIENTO POR PRIORIDAD ---
+  const localesFiltrados = locales
+    .filter(loc => {
+      const nombre = loc.nombre || "";
+      const coincideBusca = nombre.toLowerCase().includes(busqueda.toLowerCase());
+      const coincideFiltro = filtro === 'TODO' || loc.categoria === filtro;
+      const coincideFav = verFavoritos ? favoritos.includes(loc.id) : true;
+      return coincideBusca && coincideFiltro && coincideFav;
+    })
+    .sort((a, b) => (b.prioridad || 0) - (a.prioridad || 0)); // <--- ORDENA POR JERARQUÍA
 
   const categoriasExtraidas = [...new Set(locales.map(l => l.categoria))].filter(Boolean);
   const listaCategorias = ['TODO', ...categoriasExtraidas];
@@ -133,7 +136,7 @@ function App() {
           )}
 
           <header className="max-w-6xl mx-auto mb-10 flex flex-col items-center w-full animate-in fade-in duration-1000">
-            <h1 className="text-5xl font-black italic  tracking-tighter mb-8 leading-none">
+            <h1 className="text-5xl font-black italic tracking-tighter mb-8 leading-none">
               Isdely<span className="text-[#8B5CF6]">.</span>
             </h1>
             
@@ -183,7 +186,6 @@ function App() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {localesFiltrados.map((loc, index) => (
                   <div key={loc.id} className="animate-cascade" style={{ animationDelay: `${index * 150}ms` }}>
-                    {/* AJUSTE AQUÍ: El onClick solo se activa si menuActivo es true */}
                     <Tarjeta 
                       negocio={loc} 
                       esFavorito={favoritos.includes(loc.id)} 
