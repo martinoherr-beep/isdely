@@ -24,7 +24,7 @@ function App() {
   // ESTADO PARA EL LOGIN VISUAL PROTEGIDO
   const [mostrarLogin, setMostrarLogin] = useState(false);
   const [pinIngresado, setPinIngresado] = useState('');
-  const PIN_MAESTRO = "Cr34tors*"; // <--- CAMBIA TU PIN AQUÍ
+  const PIN_MAESTRO = "Cr34tors*"; 
 
   // CONEXIÓN EN TIEMPO REAL CON FIREBASE
   useEffect(() => {
@@ -74,7 +74,6 @@ function App() {
     return coincideBusca && coincideFiltro && coincideFav;
   });
 
-  // RECUPERAMOS: CATEGORÍAS DINÁMICAS (Lógica inteligente)
   const categoriasExtraidas = [...new Set(locales.map(l => l.categoria))].filter(Boolean);
   const listaCategorias = ['TODO', ...categoriasExtraidas];
 
@@ -85,7 +84,6 @@ function App() {
   return (
     <div className="min-h-screen bg-[#121212] text-white p-6 pb-12 font-sans flex flex-col">
       
-      {/* 1. MODO ADMINISTRADOR (PANEL REAL) */}
       {modoAdmin ? (
         <div className="animate-in fade-in slide-in-from-top-4 duration-500">
           <button 
@@ -97,7 +95,6 @@ function App() {
           <AdminPanel />
         </div>
       ) : mostrarLogin ? (
-        /* 2. PANTALLA DE LOGIN VISUAL (Diseño Isdely) */
         <div className="fixed inset-0 z-[200] bg-[#121212]/95 backdrop-blur-xl flex items-center justify-center p-6 animate-in fade-in zoom-in duration-300">
            <div className="w-full max-w-xs bg-[#1A1A1A] p-10 rounded-[2.5rem] border border-white/5 shadow-2xl text-center">
               <h2 className="text-xl font-black italic text-white mb-6 uppercase tracking-tighter">Acceso <span className="text-[#8B5CF6]">Privado</span></h2>
@@ -116,9 +113,7 @@ function App() {
            </div>
         </div>
       ) : (
-        /* 3. MODO USUARIO (RECUPERADO AL 100%) */
         <>
-          {/* BANNER DE PROMO ORIGINAL */}
           {locales.some(l => l.promo) && (
             <div className="-mx-6 -mt-6 mb-10 bg-[#8B5CF6]/30 backdrop-blur-xl py-3 border-b border-white/10 z-50 sticky top-0 overflow-hidden" style={{ width: 'calc(100% + 3rem)' }}>
               <div style={{ display: 'flex', width: 'max-content', animation: 'marquee 30s linear infinite' }}>
@@ -137,10 +132,9 @@ function App() {
             </div>
           )}
 
-          {/* HEADER CENTRAL CON BUSCADOR (RECUPERADO) */}
           <header className="max-w-6xl mx-auto mb-10 flex flex-col items-center w-full animate-in fade-in duration-1000">
-            <h1 className="text-5xl font-black italic uppercase tracking-tighter mb-8 leading-none">
-              ISDELY<span className="text-[#8B5CF6]">.</span>
+            <h1 className="text-5xl font-black italic  tracking-tighter mb-8 leading-none">
+              Isdely<span className="text-[#8B5CF6]">.</span>
             </h1>
             
             <div className="w-full max-w-3xl flex gap-3 mb-8 items-stretch">
@@ -169,7 +163,6 @@ function App() {
               </button>
             </div>
 
-            {/* CATEGORÍAS INTELIGENTES (RECUPERADO) */}
             <div className="w-full max-w-2xl overflow-x-auto pb-2 no-scrollbar">
               <div className="flex justify-start md:justify-center gap-2.5 min-w-max px-4">
                 {listaCategorias.map(cat => (
@@ -185,13 +178,18 @@ function App() {
             </div>
           </header>
 
-          {/* GRID DE LOCALES */}
           <main className="max-w-6xl mx-auto flex-1 w-full">
             {localesFiltrados.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {localesFiltrados.map((loc, index) => (
                   <div key={loc.id} className="animate-cascade" style={{ animationDelay: `${index * 150}ms` }}>
-                    <Tarjeta negocio={loc} esFavorito={favoritos.includes(loc.id)} onToggleFav={toggleFavorito} onClick={() => setNegocioSeleccionado(loc)} />
+                    {/* AJUSTE AQUÍ: El onClick solo se activa si menuActivo es true */}
+                    <Tarjeta 
+                      negocio={loc} 
+                      esFavorito={favoritos.includes(loc.id)} 
+                      onToggleFav={toggleFavorito} 
+                      onClick={() => loc.menuActivo && setNegocioSeleccionado(loc)} 
+                    />
                   </div>
                 ))}
               </div>
@@ -208,12 +206,10 @@ function App() {
         <MenuModal negocio={negocioSeleccionado} onClose={() => setNegocioSeleccionado(null)} />
       )}
 
-      {/* FOOTER: SIEMPRE VISIBLE */}
       <footer className="max-w-6xl mx-auto w-full mt-20 pt-10 border-t border-white/5 text-center">
         <p className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500 mb-2">Hecho con ❤️ by Creators</p>
         <p className="text-[8px] font-black tracking-[0.4em] text-gray-500 mb-1">Derechos Reservados 2026</p>
 
-        {/* BOTÓN ADMIN PROTEGIDO POR URL */}
         {window.location.search.includes('admin=isdely2026') && (
           <div className="mt-6">
             <button 
