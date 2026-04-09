@@ -167,12 +167,30 @@ function App() {
 
           <header className="max-w-6xl mx-auto mb-10 flex flex-col items-center w-full animate-in fade-in duration-1000">
             {/* LOGO CON ACCESO SECRETO AL PIN */}
-            <h1 
-              onClick={() => setMostrarLogin(true)}
-              className="text-5xl font-black italic tracking-tighter mb-8 leading-none cursor-pointer hover:scale-105 transition-transform"
-            >
-              Isdely<span className="text-[#8B5CF6]">.</span>
-            </h1>
+            <h1 className="text-5xl font-black italic tracking-tighter mb-8 leading-none select-none">
+  Isdely
+  <span 
+    className="text-[#8B5CF6] cursor-default p-2" // Añadimos un pequeño padding para que sea fácil de atinar con el dedo
+    onClick={() => {
+      const ahora = Date.now();
+      // Si pasa más de medio segundo entre clics, se reinicia el contador
+      if (ahora - (window.lastClickTime || 0) > 500) {
+        window.clickCount = 1;
+      } else {
+        window.clickCount = (window.clickCount || 0) + 1;
+      }
+      
+      window.lastClickTime = ahora;
+
+      if (window.clickCount === 5) {
+        setMostrarLogin(true);
+        window.clickCount = 0;
+      }
+    }}
+  >
+    .
+  </span>
+</h1>
             
             <div className="w-full max-w-3xl flex gap-3 mb-8 items-stretch">
               <div className="relative flex-1">

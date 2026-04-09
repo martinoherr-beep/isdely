@@ -20,22 +20,12 @@ export default function Splash({ onFinish }) {
         <div className="animate-bounce mb-4">
            <span className="text-5xl">🚀</span>
         </div>
-        <h1 className="text-5xl font-black italic tracking-tighter mb-8 leading-none">
-  Isdely
-  <span 
-    className="text-[#8B5CF6] cursor-default"
-    onClick={(e) => {
-      window.clickCount = (window.clickCount || 0) + 1;
-      if (window.clickCount === 5) { // Requiere 5 clics rápidos
-        setMostrarLogin(true);
-        window.clickCount = 0;
-      }
-      setTimeout(() => { window.clickCount = 0; }, 2000); // Si no hace los 5 clics en 2 seg, se resetea
-    }}
-  >
-    .
-  </span>
-</h1>
+        <h1 className="text-6xl font-black italic tracking-tighter text-white">
+          Isdely<span className="text-[#8B5CF6]">.</span>
+        
+        
+        
+        </h1>
         <p className="text-[#8B5CF6] text-[10px] font-bold uppercase tracking-[0.5em] mt-4 animate-pulse">
           Cerca de ti
         </p>
