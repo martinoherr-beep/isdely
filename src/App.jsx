@@ -10,7 +10,14 @@ import AdminPanel from './components/AdminPanel';
 import MenuModal from './components/MenuModal';
 
 function App() {
-  const [showSplash, setShowSplash] = useState(true);
+  // --- DETECCIÓN INTELIGENTE DE SPLASH ---
+  // Si es celular o PWA instalada, empezamos con showSplash en false para ir directo.
+  const [showSplash, setShowSplash] = useState(() => {
+    const esCelular = window.innerWidth <= 768;
+    const esAppInstalada = window.matchMedia('(display-mode: standalone)').matches;
+    return !(esCelular || esAppInstalada);
+  });
+
   const [busqueda, setBusqueda] = useState('');
   const [filtro, setFiltro] = useState('TODO');
   const [verFavoritos, setVerFavoritos] = useState(false);
@@ -26,6 +33,17 @@ function App() {
   const [pinIngresado, setPinIngresado] = useState('');
   const PIN_MAESTRO = "Cr34tors*"; 
 
+  // --- EFECTO PARA ACCESO DIRECTO AL PANEL ---
+  useEffect(() => {
+    // Si entras vía: https://isdely.vercel.app/?view=admin
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('view') === 'admin') {
+      setMostrarLogin(true);
+      // Limpiamos la URL para estética
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, []);
+
   // CONEXIÓN EN TIEMPO REAL CON FIREBASE
   useEffect(() => {
     const unsub = onSnapshot(collection(db, "locales"), (snapshot) => {
@@ -38,6 +56,7 @@ function App() {
     return () => unsub();
   }, []);
 
+  // --- LÓGICA DE LOGIN Y FAVORITOS ---
   const manejarLogin = (e) => {
     e.preventDefault();
     if (pinIngresado === PIN_MAESTRO) {
@@ -66,22 +85,18 @@ function App() {
     }
   };
 
-  // --- LÓGICA DE FILTRADO (MULTI-CATEGORÍA) Y ORDENAMIENTO ---
+  // --- FILTRADO Y CATEGORÍAS ---
   const localesFiltrados = locales
     .filter(loc => {
       const nombre = loc.nombre || "";
       const coincideBusca = nombre.toLowerCase().includes(busqueda.toLowerCase());
-      
-      // Ajuste para Multi-Categoría:
       const categoriasDelLoc = Array.isArray(loc.categoria) ? loc.categoria : [loc.categoria];
       const coincideFiltro = filtro === 'TODO' || categoriasDelLoc.includes(filtro);
-      
       const coincideFav = verFavoritos ? favoritos.includes(loc.id) : true;
       return coincideBusca && coincideFiltro && coincideFav;
     })
     .sort((a, b) => (b.prioridad || 0) - (a.prioridad || 0));
 
-  // --- EXTRACCIÓN DINÁMICA DE TODAS LAS CATEGORÍAS ---
   const todasLasCategorias = locales.reduce((acc, loc) => {
     const cats = Array.isArray(loc.categoria) ? loc.categoria : [loc.categoria];
     return [...acc, ...cats];
@@ -90,6 +105,7 @@ function App() {
   const categoriasExtraidas = [...new Set(todasLasCategorias)].filter(Boolean);
   const listaCategorias = ['TODO', ...categoriasExtraidas];
 
+  // --- RENDERIZADO DEL SPLASH (Solo si el estado es true) ---
   if (showSplash) {
     return <Splash onFinish={() => setShowSplash(false)} />;
   }
@@ -100,7 +116,10 @@ function App() {
       {modoAdmin ? (
         <div className="animate-in fade-in slide-in-from-top-4 duration-500">
           <button 
-            onClick={() => setModoAdmin(false)}
+            onClick={() => {
+                setModoAdmin(false);
+                setMostrarLogin(false);
+            }}
             className="mb-8 text-[#8B5CF6] font-black uppercase tracking-widest text-[10px] flex items-center gap-2"
           >
             ← Volver al Directorio
@@ -127,6 +146,7 @@ function App() {
         </div>
       ) : (
         <>
+          {/* MARQUESINA DE PROMOS */}
           {locales.some(l => l.promo) && (
             <div className="-mx-6 -mt-6 mb-10 bg-[#8B5CF6]/30 backdrop-blur-xl py-3 border-b border-white/10 z-50 sticky top-0 overflow-hidden" style={{ width: 'calc(100% + 3rem)' }}>
               <div style={{ display: 'flex', width: 'max-content', animation: 'marquee 30s linear infinite' }}>
@@ -146,7 +166,11 @@ function App() {
           )}
 
           <header className="max-w-6xl mx-auto mb-10 flex flex-col items-center w-full animate-in fade-in duration-1000">
-            <h1 className="text-5xl font-black italic tracking-tighter mb-8 leading-none">
+            {/* LOGO CON ACCESO SECRETO AL PIN */}
+            <h1 
+              onClick={() => setMostrarLogin(true)}
+              className="text-5xl font-black italic tracking-tighter mb-8 leading-none cursor-pointer hover:scale-105 transition-transform"
+            >
               Isdely<span className="text-[#8B5CF6]">.</span>
             </h1>
             
@@ -222,16 +246,15 @@ function App() {
         <p className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500 mb-2">Hecho con ❤️ by Creators</p>
         <p className="text-[8px] font-black tracking-[0.4em] text-gray-500 mb-1">Derechos Reservados 2026</p>
 
-        {window.location.search.includes('admin=isdely2026') && (
-          <div className="mt-6">
-            <button 
-              onClick={() => setMostrarLogin(true)} 
-              className="bg-[#8B5CF6] text-white text-[10px] font-black px-8 py-3 rounded-full hover:scale-110 transition-all shadow-lg shadow-purple-500/20"
-            >
-              ABRIR PANEL DE ADMIN
-            </button>
-          </div>
-        )}
+        {/* BOTÓN ADMIN EN EL FOOTER (Mantengo tu lógica original por si quieres bajar) */}
+        <div className="mt-6">
+          <button 
+            onClick={() => setMostrarLogin(true)} 
+            className="opacity-20 hover:opacity-100 transition-opacity text-white text-[8px] font-black px-4 py-2"
+          >
+            PANEL DE CONTROL
+          </button>
+        </div>
       </footer>
     </div>
   );
