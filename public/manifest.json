@@ -11,13 +11,13 @@
   "categories": ["food", "lifestyle"],
   "icons": [
     {
-      "src": "logo192.png",
+      "src": "/logo192.png",
       "type": "image/png",
       "sizes": "192x192",
       "purpose": "any"
     },
     {
-      "src": "logo-isdely.png",
+      "src": "/logo-isdely.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "maskable"
