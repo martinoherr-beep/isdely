@@ -10,7 +10,7 @@ import AdminPanel from './components/AdminPanel';
 import MenuModal from './components/MenuModal';
 
 function App() {
-  const [showSplash, setShowSplash] = useState(true);
+  const [showSplash, setShowSplash] = useState(false);
   const [busqueda, setBusqueda] = useState('');
   const [filtro, setFiltro] = useState('TODO');
   const [verFavoritos, setVerFavoritos] = useState(false);
