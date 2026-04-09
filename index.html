@@ -25,11 +25,11 @@
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js')
-        .then(reg => console.log('¡SW Registrado!', reg))
-        .catch(err => console.log('Fallo al registrar SW', err));
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => console.log('SW OK'))
+        .catch(err => console.log('SW Error', err));
     });
   }
-</script> 
+</script>
   </body>
 </html>

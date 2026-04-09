@@ -1,24 +1,26 @@
 {
   "short_name": "Isdely",
   "name": "Isdely | Directorio Local",
+  "id": "/?source=pwa",
+  "start_url": "/",
+  "display": "standalone",
+  "scope": "/",
+  "orientation": "portrait",
+  "theme_color": "#121212",
+  "background_color": "#121212",
+  "categories": ["food", "lifestyle"],
   "icons": [
     {
-      "src": "logo-isdely.png",
-      "sizes": "192x192",
+      "src": "logo192.png",
       "type": "image/png",
+      "sizes": "192x192",
       "purpose": "any"
     },
     {
       "src": "logo-isdely.png",
-      "sizes": "512x512",
       "type": "image/png",
+      "sizes": "512x512",
       "purpose": "maskable"
     }
-  ],
-  "start_url": "/",
-  "scope": "/",
-  "display": "standalone",
-  "orientation": "portrait",
-  "theme_color": "#121212",
-  "background_color": "#121212"
+  ]
 }
