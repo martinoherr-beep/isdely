@@ -1,14 +1,12 @@
-const CACHE_NAME = 'isdely-v1';
-
-self.addEventListener('install', (event) => {
+self.addEventListener('install', (e) => {
   self.skipWaiting();
 });
 
-self.addEventListener('activate', (event) => {
-  event.waitUntil(clients.claim());
+self.addEventListener('activate', (e) => {
+  e.waitUntil(clients.claim());
 });
 
-self.addEventListener('fetch', (event) => {
-  // Respuesta vacía pero funcional para cumplir el requisito PWA
-  event.respondWith(fetch(event.request));
+self.addEventListener('fetch', (e) => {
+  // Sin esto, Chrome Android NO quita la barra de direcciones
+  return;
 });
