@@ -6,8 +6,11 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Isdely">
+    <meta name="theme-color" content="#121212">
+    <meta name="mobile-web-app-capable" content="yes">
     <title>Isdely | ¿Hambre? Encuentra lo que necesites.</title>
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo-isdely.png">
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
     <link rel="icon" type="image/png" href="/logo-isdely.png" />
     <link rel="apple-touch-icon" href="/logo-isdely.png" />
 
@@ -18,5 +21,13 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+ 
+ <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('/sw.js');
+    });
+  }
+</script> 
   </body>
 </html>
