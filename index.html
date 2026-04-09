@@ -3,33 +3,35 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Isdely">
+    <link rel="apple-touch-icon" href="/logo-isdely.png">
+
     <meta name="theme-color" content="#121212">
     <meta name="mobile-web-app-capable" content="yes">
+    
     <title>Isdely | ¿Hambre? Encuentra lo que necesites.</title>
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo-isdely.png">
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+    
     <link rel="icon" type="image/png" href="/logo-isdely.png" />
-    <link rel="apple-touch-icon" href="/logo-isdely.png" />
-
-    <meta name="theme-color" content="#121212" />
-
     <link rel="manifest" href="/manifest.json" />
+
   </head>
   <body>
     <div id="root"></div>
+    
     <script type="module" src="/src/main.jsx"></script>
- 
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js')
-        .then(reg => console.log('SW OK'))
-        .catch(err => console.log('SW Error', err));
-    });
-  }
-</script>
+
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          // Usamos /sw.js con la barra inicial para asegurar la raíz
+          navigator.serviceWorker.register('/sw.js')
+            .then(reg => console.log('SW OK en scope:', reg.scope))
+            .catch(err => console.log('SW Error:', err));
+        });
+      }
+    </script>
   </body>
 </html>
