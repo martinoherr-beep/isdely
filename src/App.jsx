@@ -261,7 +261,7 @@ function App() {
       )}
 
       <footer className="max-w-6xl mx-auto w-full mt-20 pt-10 border-t border-white/5 text-center">
-        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500 mb-2">Hecho con ❤️ by Creators</p>
+        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-500 mb-2">Hecho con ❤️ by moapp</p>
         <p className="text-[8px] font-black tracking-[0.4em] text-gray-500 mb-1">Derechos Reservados 2026</p>
 
         {/* BOTÓN ADMIN EN EL FOOTER (Mantengo tu lógica original por si quieres bajar) */}
